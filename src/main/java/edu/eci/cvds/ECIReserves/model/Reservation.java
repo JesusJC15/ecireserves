@@ -1,4 +1,4 @@
-package edu.eci.cvds.ecireserves.model;
+package edu.eci.cvds.ECIReserves.model;
 
 import java.time.LocalDateTime;
 
@@ -23,4 +23,9 @@ public class Reservation {
     private Laboratory laboratory;
     private LocalDateTime dateTime;
     private String purpose;
+
+    private Status status;
+
+
+
 }
