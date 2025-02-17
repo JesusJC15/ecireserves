@@ -7,5 +7,4 @@ import edu.eci.cvds.ecireserves.model.Laboratory;
 
 @Repository
 public interface LaboratoryRepository extends MongoRepository<Laboratory, String> {
-    // This interface is used to interact with the database
 }

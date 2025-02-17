@@ -7,5 +7,4 @@ import edu.eci.cvds.ecireserves.model.User;
 
 @Repository
 public interface UserRepository extends MongoRepository<User, String> {
-    // This interface is used to interact with the database
 }
