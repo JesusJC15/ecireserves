@@ -1,4 +1,4 @@
-package edu.eci.cvds.ECIReserves.service;
+package edu.eci.cvds.ECIReserves.Exceptions;
 
 public class ReserveException extends Exception{
 
