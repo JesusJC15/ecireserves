@@ -19,7 +19,7 @@ public class Laboratory {
     private String id;
     private String name;
     private int capacity;
-    private int computers;
+    private Integer computers;
     private String description;
     private LocalDateTime openingTime;
     private LocalDateTime closingTime;
