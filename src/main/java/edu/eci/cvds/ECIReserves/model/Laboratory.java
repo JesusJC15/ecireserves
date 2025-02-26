@@ -1,4 +1,4 @@
-package edu.eci.cvds.ecireserves.model;
+package edu.eci.cvds.ECIReserves.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
