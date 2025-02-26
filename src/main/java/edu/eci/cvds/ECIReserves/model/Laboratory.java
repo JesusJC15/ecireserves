@@ -7,6 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,4 +19,10 @@ public class Laboratory {
     private String id;
     private String name;
     private int capacity;
+    private int computers;
+    private String description;
+    private LocalDateTime openingTime;
+    private LocalDateTime closingTime;
+    private boolean available;
+
 }

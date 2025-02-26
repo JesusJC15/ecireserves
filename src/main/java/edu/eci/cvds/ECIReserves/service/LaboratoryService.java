@@ -1,19 +1,1 @@
-package edu.eci.cvds.ECIReserves.service;
-
-import edu.eci.cvds.ECIReserves.model.Laboratory;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-
-
-@Service
-public class LaboratoryService {
-
-    public ArrayList<Laboratory>  getAvailableLabs(){
-        return new ArrayList<>();
-    }
-
-
-
-
-}
+package edu.eci.cvds.ECIReserves.service;import edu.eci.cvds.ECIReserves.model.Laboratory;import edu.eci.cvds.ECIReserves.repository.LaboratoryRepository;import org.springframework.beans.factory.annotation.Autowired;import org.springframework.stereotype.Service;import java.time.LocalDateTime;import java.util.*;@Servicepublic class LaboratoryService {    private final LaboratoryRepository laboratoryRepository;    @Autowired    public LaboratoryService(LaboratoryRepository laboratoryRepository) {        this.laboratoryRepository = laboratoryRepository;    }    public ArrayList<Laboratory>  getAvailableLabs(){ return new ArrayList<>();    }    public Laboratory addLab(Laboratory lab) {        if (lab.getCapacity() <= 0) {            throw new IllegalArgumentException("Capacity must be greater than zero");        }        return laboratoryRepository.save(lab);    }    public Laboratory updateLab(String id, Laboratory updatedLab){ return null;}    public void deleteLab(String id){        laboratoryRepository.deleteById(id);    }    public ArrayList<Laboratory> findAvailableLabsBetween(LocalDateTime start, LocalDateTime end){ return new ArrayList<>();}    public boolean isLabAvailable(String labId, LocalDateTime start, LocalDateTime end){return false;}    public ArrayList<Laboratory> searchLabs(String name, Integer minCapacity, Integer minComputers, Boolean available){ return new ArrayList<>();}    public List<Laboratory> getLabsByName(String name) {        return laboratoryRepository.findByName(name);    }    public List<Laboratory> getLabsByCapacity(int minCapacity) {        return laboratoryRepository.findByCapacityGreaterThanEqual(minCapacity);    }    public List<Laboratory> getLabsByComputers(int minComputers) {        return laboratoryRepository.findByComputersGreaterThanEqual(minComputers);    }    public List<Laboratory> getLabsByOpeningTime(LocalDateTime openingTime) {        return laboratoryRepository.findByOpeningTime(openingTime);    }    public List<Laboratory> getLabsByClosingTime(LocalDateTime closingTime) {        return laboratoryRepository.findByClosingTime(closingTime);    }}

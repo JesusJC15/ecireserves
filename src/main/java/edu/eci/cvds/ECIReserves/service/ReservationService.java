@@ -36,8 +36,6 @@ public class ReservationService {
     * Método para consultar las reservas de un usuario
     * @Param userID el ID del usuario
     * return ArrayLis<Reservation> una lista con las reservas del usuario*/
-    public ArrayList<Reservation> getUserReservation(String userId){
-
-        return new ArrayList<Reservation>();
+    public ArrayList<Reservation> getUserReservation(String userId){ return new ArrayList<Reservation>();
     }
 }
