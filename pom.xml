@@ -13,7 +13,7 @@
 	<groupId>edu.eci.cvds</groupId>
 	<artifactId>ecireserves</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ECIReserves</name>
+	<name>ecireserves</name>
 	<description>Laboratory reservation system for the Deanship of Systems Engineering</description>
 	<url/>
 	<licenses>
@@ -36,6 +36,12 @@
 	</properties>
 
 	<dependencies>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-mongodb</artifactId>

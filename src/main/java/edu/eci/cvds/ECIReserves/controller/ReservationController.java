@@ -1,4 +1,4 @@
-package edu.eci.cvds.ECIReserves.controller;
+package edu.eci.cvds.ecireserves.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
