@@ -12,18 +12,19 @@ import java.util.Map;
 
 @Service
 public class UserService {
-    private final List<User> users = new ArrayList<>();
+    @Autowired
+    private UserRepository userRepository;
 
-    public void createUsers(User user){
+    public boolean createUsers(User user){
         if(user.getId() == null || user.getEmail() == null || user.getEmail().isEmpty() || user.getId().isEmpty()
         ||user.getPassword() == null || user.getPassword().isEmpty()){
-            return;
+            return false;
         }
-        if(users.stream().anyMatch(u -> u.getId().equals(user.getId())) ||
-                users.stream().anyMatch(u -> u.getEmail().equals(user.getEmail()))){
-        return;
+        if(userRepository.findById(user.getId()).isPresent() || userRepository.findByEmail(user.getEmail()) != null){
+        return false;
         }
-        users.add(user);
+        userRepository.save(user);
+        return true;
     }
 
     public boolean updateUsers(String id,String name,String email,String password){
@@ -31,35 +32,31 @@ public class UserService {
                 password == null || password.isEmpty()){
             return false;
         }
-        for(User u : users){
-            if(u.getId().equals(id)){
-                u.setName(name);
-                u.setEmail(email);
-                u.setPassword(password);
-                return  true;
-            }
+
+       User user = userRepository.findById(id).orElse(null);
+        if(user == null){
+            return false;
         }
-        return false;
+        user.setName(name);
+        user.setEmail(email);
+        user.setPassword(password);
+        userRepository.save(user);
+        return true;
     }
 
-    public void removeUsers(User user){
-        if(user == null || user.getEmail().isEmpty() || user.getId().isEmpty()){
+    public void removeUsers(String id){
+        if(id == null || id.isEmpty()) {
             return;
         }
-        users.remove(user);
+        userRepository.deleteById(id);
     }
 
     public List<User> getAllUsers() {
-        return users;
+        return userRepository.findAll();
     }
 
     public User getUser(String id){
-        for(User u : users){
-            if(u.getId().equals(id)){
-                return u;
-            }
-        }
-        return null;
+        return userRepository.findById(id).orElse(null);
     }
 
 }
