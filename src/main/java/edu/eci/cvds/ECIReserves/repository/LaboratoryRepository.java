@@ -16,18 +16,24 @@ public interface LaboratoryRepository extends MongoRepository<Laboratory, String
 
     @Query("{ 'name' : ?0 }")
     List<Laboratory> findByName(String name);
+
+
+
     @Query("{ 'computers' : { $gte: ?0 } }")
     List<Laboratory> findByComputersGreaterThanEqual(int minComputers);
 
     @Query("{ 'openingTime' : { $gte: ?0 }, 'closingTime' : { $lte: ?1 } }")
-    List<Laboratory> findByOpeningTimeBetween(Date start, Date end);
+    List<Laboratory> findByTimeBetween(Date start, Date end);
 
-    @Query("{ 'openingTime' : ?0 }")
+
     List<Laboratory> findByOpeningTime(LocalDateTime openingTime);
-    @Query("{ 'closingTime' : ?0 }")
+
     List<Laboratory> findByClosingTime(LocalDateTime closingTime);
     @Query("{ 'capacity' : { $gte: ?0 } }")
     List<Laboratory> findByCapacityGreaterThanEqual(int minCapacity);
+
+    @Query("{ 'name': ?0, 'capacity': { $gte: ?1 }, 'computers': { $gte: ?2 } }")
+    List<Laboratory> findByNameCapacityAndComputers(String name, Integer minCapacity, Integer minComputers);
 }
 
 

@@ -23,10 +23,8 @@ public class Laboratory {
     private int capacity;
     private Integer computers;
     private String description;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "UTC")
     private Date openingTime;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "UTC")
     private Date closingTime;
-    private boolean available;
+
 
 }
