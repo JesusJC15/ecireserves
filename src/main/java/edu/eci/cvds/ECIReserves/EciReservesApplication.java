@@ -13,8 +13,7 @@ public class EciReservesApplication {
 
 	public static void main(String[] args) {
 
-		Laboratory lab = new Laboratory(null, "Lab 1", 20, 10, "Laboratorio de pruebas",
-				new Date(1709468400000L), new Date(1709497200000L)); // 09:00 - 18:00 UTC
+
 
 		// Inicia el contexto de Spring
 		ApplicationContext context = SpringApplication.run(EciReservesApplication.class, args);

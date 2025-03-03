@@ -1,5 +1,6 @@
 package edu.eci.cvds.ECIReserves;
 
+import edu.eci.cvds.ECIReserves.model.Day;
 import edu.eci.cvds.ECIReserves.model.Laboratory;
 import edu.eci.cvds.ECIReserves.model.Reservation;
 import edu.eci.cvds.ECIReserves.repository.LaboratoryRepository;
@@ -37,7 +38,7 @@ class EciReservesApplicationTests {
 
 	@Test
 	void shouldAddLabWhenValid() {
-		Laboratory lab = new Laboratory("1", "Lab A", 30, 10, "Descripcion", new Date(), new Date());
+		Laboratory lab = new Laboratory("1", "Lab A", 30, 10, "Descripcion", new Date(), new Date(), Day.MONDAY);
 		when(laboratoryRepository.save(any(Laboratory.class))).thenReturn(lab);
 
 		Laboratory result = laboratoryService.addLab(lab);
@@ -60,7 +61,7 @@ class EciReservesApplicationTests {
 	void shouldFindAvailableLabsBetweenDates() {
 		Date start = new Date();
 		Date end = new Date(start.getTime() + 2 * 60 * 60 * 1000);
-		Laboratory lab = new Laboratory("1", "Lab A", 30, 10, "Descripcion", start, end);
+		Laboratory lab = new Laboratory("1", "Lab A", 30, 10, "Descripcion", start, end, Day.MONDAY);
 
 		when(laboratoryRepository.findByTimeBetween(start, end)).thenReturn(Collections.singletonList(lab));
 		when(reservationRepository.findByLaboratoryIdAndDateTimeBetween(lab.getId(), start, end)).thenReturn(Collections.emptyList());
@@ -76,7 +77,7 @@ class EciReservesApplicationTests {
 	void shouldNotFindAvailableLabsWhenReserved() {
 		Date start = new Date();
 		Date end = new Date(start.getTime() + 2 * 60 * 60 * 1000);
-		Laboratory lab = new Laboratory("1", "Lab A", 30, 10, "Descripcion", start, end);
+		Laboratory lab = new Laboratory("1", "Lab A", 30, 10, "Descripcion", start, end, Day.MONDAY);
 		Reservation reservation = new Reservation("1", null, lab, start, "Uso" , null);
 
 		when(laboratoryRepository.findByTimeBetween(start, end)).thenReturn(Collections.singletonList(lab));
@@ -121,8 +122,8 @@ class EciReservesApplicationTests {
 		Date start = new Date();
 		Date end = new Date(start.getTime() + (4 * 60 * 60 * 1000)); // 4 horas después
 
-		Laboratory lab1 = new Laboratory("1", "Lab A", 20, 10, "Desc", start, end);
-		Laboratory lab2 = new Laboratory("2", "Lab B", 15, 8, "Desc", start, end);
+		Laboratory lab1 = new Laboratory("1", "Lab A", 20, 10, "Desc", start, end, Day.THURSDAY) ;
+		Laboratory lab2 = new Laboratory("2", "Lab B", 15, 8, "Desc", start, end, Day.WEDNESDAY);
 		List<Laboratory> labs = List.of(lab1, lab2);
 
 		when(laboratoryRepository.findByTimeBetween(start, end)).thenReturn(labs);
@@ -139,8 +140,8 @@ class EciReservesApplicationTests {
 		Date start = new Date();
 		Date end = new Date(start.getTime() + (4 * 60 * 60 * 1000));
 
-		Laboratory lab1 = new Laboratory("1", "Lab A", 20, 10, "Desc", start, end);
-		Laboratory lab2 = new Laboratory("2", "Lab B", 15, 8, "Desc", start, end);
+		Laboratory lab1 = new Laboratory("1", "Lab A", 20, 10, "Desc", start, end, Day.THURSDAY);
+		Laboratory lab2 = new Laboratory("2", "Lab B", 15, 8, "Desc", start, end, Day.WEDNESDAY);
 		List<Laboratory> labs = List.of(lab1, lab2);
 
 		when(laboratoryRepository.findByTimeBetween(start, end)).thenReturn(labs);
@@ -175,8 +176,8 @@ class EciReservesApplicationTests {
 	void shouldUpdateLabSuccessfully() {
 		Date start = new Date();
 		Date end = new Date(start.getTime() + (4 * 60 * 60 * 1000));
-		Laboratory existingLab = new Laboratory("1", "Lab A", 30, 10, "Descripcion", start, end);
-		Laboratory updatedLab = new Laboratory("1", "Lab B", 40, 15, "New Desc", start, end);
+		Laboratory existingLab = new Laboratory("1", "Lab A", 30, 10, "Descripcion", start, end, Day.TUESDAY);
+		Laboratory updatedLab = new Laboratory("1", "Lab B", 40, 15, "New Desc", start, end, Day.TUESDAY);
 
 		when(laboratoryRepository.findById(anyString())).thenReturn(Optional.of(existingLab));
 		when(laboratoryRepository.save(any(Laboratory.class))).thenReturn(existingLab);
@@ -192,13 +193,13 @@ class EciReservesApplicationTests {
 	@Test
 	void shouldNotUpdateLabWithInvalidValues() {
 
-		Laboratory existingLab = new Laboratory("1", "Lab A", 30, 10, "Descripcion", new Date(), new Date());
+		Laboratory existingLab = new Laboratory("1", "Lab A", 30, 10, "Descripcion", new Date(), new Date(), Day.SATURDAY);
 
 
 		when(laboratoryRepository.findById("1")).thenReturn(Optional.of(existingLab));
 
 
-		Laboratory updatedLab = new Laboratory("1", null, -5, -3, null, null, null);
+		Laboratory updatedLab = new Laboratory("1", null, -5, -3, null, null, null, null);
 
 		Laboratory result = laboratoryService.updateLab("1", updatedLab);
 
@@ -222,7 +223,7 @@ class EciReservesApplicationTests {
 
 	@Test
 	void shouldReturnLabsMatchingCriteria() {
-		Laboratory lab = new Laboratory("1", "Lab A", 30, 10, "Descripcion", new Date(), new Date());
+		Laboratory lab = new Laboratory("1", "Lab A", 30, 10, "Descripcion", new Date(), new Date(), Day.WEDNESDAY);
 		when(laboratoryRepository.findByNameCapacityAndComputers("Lab A", 10, 5))
 				.thenReturn(Collections.singletonList(lab));
 
