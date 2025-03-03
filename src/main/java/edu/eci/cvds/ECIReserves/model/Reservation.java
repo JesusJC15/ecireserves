@@ -1,6 +1,7 @@
 package edu.eci.cvds.ECIReserves.model;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -21,7 +22,7 @@ public class Reservation {
     private User user;
     @DBRef
     private Laboratory laboratory;
-    private LocalDateTime dateTime;
+    private Date dateTime;
     private String purpose;
 
     private Status status;
