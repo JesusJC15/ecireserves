@@ -1,0 +1,70 @@
+package edu.eci.cvds.ECIReserves.controller;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import edu.eci.cvds.ECIReserves.dto.ReservationDTO;
+import edu.eci.cvds.ECIReserves.exception.EciReservesException;
+import edu.eci.cvds.ECIReserves.model.Reservation;
+import edu.eci.cvds.ECIReserves.model.ReservationStatus;
+import edu.eci.cvds.ECIReserves.service.ReservationService;
+
+@RestController
+@RequestMapping("/api/reservations")
+@CrossOrigin(origins = "*")
+public class ReservationController {
+    @Autowired
+    private ReservationService reservationService;
+
+    @GetMapping
+    public List<Reservation> getAllReservations() {
+        return reservationService.getAllReservations();
+    }
+
+    @GetMapping("/{id}")
+    public Optional<Reservation> getReservationById(@PathVariable("id") String id) {
+        return reservationService.getReservationById(id);
+    }
+
+    @GetMapping("/user/{userId}")
+    public List<Reservation> getReservationsByUserId(@PathVariable("userId") String userId) {
+        return reservationService.getReservationsByUserId(userId);
+    }
+
+    @GetMapping("/laboratory/{laboratoryId}")
+    public List<Reservation> getReservationsByLaboratoryId(@PathVariable("laboratoryId") String laboratoryId) {
+        return reservationService.getReservationsByLaboratoryId(laboratoryId);
+    }
+
+    @GetMapping("/status/{status}")
+    public List<Reservation> getReservationsByStatus(@PathVariable("status") ReservationStatus status) {
+        return reservationService.getReservationsByStatus(status);
+    }
+
+    @GetMapping("/user/{userId}/status/{status}")
+    public List<Reservation> getReservationsByUserIdAndStatus(@PathVariable("userId") String userId, @PathVariable("status") ReservationStatus status) {
+        return reservationService.getReservationsByUserIdAndStatus(userId, status);
+    }
+
+    //More GET methods can be added
+
+    @PostMapping
+    public Reservation createReservation(@RequestBody ReservationDTO reservationDTO) throws EciReservesException {
+        return reservationService.createReservation(reservationDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteReservation(@PathVariable("id") String id) {
+        reservationService.deleteReservation(id);
+    }
+}
