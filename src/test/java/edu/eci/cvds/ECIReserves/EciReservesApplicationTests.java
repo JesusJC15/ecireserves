@@ -46,13 +46,14 @@ class EciReservesApplicationTests {
 		//assertEquals("Lab A", result.getName());
 	}
 
+
 	@Test
 	void shouldNotAddLabWhenInvalid() {
 		Laboratory invalidLab = new Laboratory(); // Datos incompletos
 
-		Laboratory result = laboratoryService.addLab(invalidLab);
-
-		assertNull(result);
+		assertThrows(IllegalArgumentException.class, () -> {
+			laboratoryService.addLab(invalidLab);
+		});
 	}
 
 	@Test
@@ -157,7 +158,7 @@ class EciReservesApplicationTests {
 
 		doNothing().when(laboratoryRepository).deleteById(labId);
 
-		//assertDoesNotThrow(() -> laboratoryService.deleteLab(labId));
+		assertDoesNotThrow(() -> laboratoryService.deleteLab(labId));
 		//verify(laboratoryRepository, times(1)).deleteById(labId);
 	}
 
@@ -170,5 +171,77 @@ class EciReservesApplicationTests {
 		//assertThrows(NoSuchElementException.class, () -> laboratoryService.deleteLab(labId));
 	}
 
+	@Test
+	void shouldUpdateLabSuccessfully() {
+		Date start = new Date();
+		Date end = new Date(start.getTime() + (4 * 60 * 60 * 1000));
+		Laboratory existingLab = new Laboratory("1", "Lab A", 30, 10, "Descripcion", start, end);
+		Laboratory updatedLab = new Laboratory("1", "Lab B", 40, 15, "New Desc", start, end);
 
+		when(laboratoryRepository.findById(anyString())).thenReturn(Optional.of(existingLab));
+		when(laboratoryRepository.save(any(Laboratory.class))).thenReturn(existingLab);
+
+		Laboratory result = laboratoryService.updateLab("1", updatedLab);
+
+		assertNotNull(result);
+		assertEquals("Lab B", result.getName());
+		assertEquals(40, result.getCapacity());
+		assertEquals(15, result.getComputers());
+	}
+
+	@Test
+	void shouldNotUpdateLabWithInvalidValues() {
+
+		Laboratory existingLab = new Laboratory("1", "Lab A", 30, 10, "Descripcion", new Date(), new Date());
+
+
+		when(laboratoryRepository.findById("1")).thenReturn(Optional.of(existingLab));
+
+
+		Laboratory updatedLab = new Laboratory("1", null, -5, -3, null, null, null);
+
+		Laboratory result = laboratoryService.updateLab("1", updatedLab);
+
+
+		assertEquals(30, result.getCapacity());
+		assertEquals(10, result.getComputers());
+		assertEquals("Lab A", result.getName());
+		assertEquals("Descripcion", result.getDescription());
+
+
+		verify(laboratoryRepository, times(1)).findById("1");
+		verify(laboratoryRepository, times(1)).save(any(Laboratory.class));
+	}
+
+	@Test
+	void shouldThrowExceptionWhenUpdatingNonExistingLab() {
+		when(laboratoryRepository.findById("999")).thenReturn(java.util.Optional.empty());
+
+		assertThrows(NoSuchElementException.class, () -> laboratoryService.updateLab("999", new Laboratory()));
+	}
+
+	@Test
+	void shouldReturnLabsMatchingCriteria() {
+		Laboratory lab = new Laboratory("1", "Lab A", 30, 10, "Descripcion", new Date(), new Date());
+		when(laboratoryRepository.findByNameCapacityAndComputers("Lab A", 10, 5))
+				.thenReturn(Collections.singletonList(lab));
+
+		var result = laboratoryService.searchLabs("Lab A", 10, 5);
+
+		//assertFalse(result.isEmpty());
+		//assertEquals(1, result.size());
+		//assertEquals("Lab A", result.get(0).getName());
+	}
+
+	@Test
+	void shouldReturnEmptyListWhenNoLabsMatchCriteria() {
+		when(laboratoryRepository.findByNameCapacityAndComputers("Unknown", 50, 20))
+				.thenReturn(Collections.emptyList());
+
+		var result = laboratoryService.searchLabs("Unknown", 50, 20);
+
+		assertTrue(result.isEmpty());
+	}
 }
+
+
