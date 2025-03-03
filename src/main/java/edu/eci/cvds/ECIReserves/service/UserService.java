@@ -17,7 +17,7 @@ public class UserService {
 
     public boolean createUsers(User user){
         if(user.getId() == null || user.getEmail() == null || user.getEmail().isEmpty() || user.getId().isEmpty()
-        ||user.getPassword() == null || user.getPassword().isEmpty()){
+        ||user.getPassword() == null || user.getPassword().isEmpty() ||user.getName() == null || user.getName().isEmpty()){
             return false;
         }
         if(userRepository.findById(user.getId()).isPresent() || userRepository.findByEmail(user.getEmail()) != null){
