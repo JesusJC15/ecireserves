@@ -1,4 +1,4 @@
-package edu.eci.cvds.ECIReserves;
+package edu.eci.cvds.ecireserves;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

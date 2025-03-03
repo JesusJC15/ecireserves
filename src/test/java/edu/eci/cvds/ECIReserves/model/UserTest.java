@@ -1,4 +1,4 @@
-package edu.eci.cvds.ECIReserves.model;
+package edu.eci.cvds.ecireserves.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;

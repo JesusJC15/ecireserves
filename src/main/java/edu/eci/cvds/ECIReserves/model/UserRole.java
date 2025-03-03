@@ -1,4 +1,4 @@
-package edu.eci.cvds.ECIReserves.model;
+package edu.eci.cvds.ecireserves.model;
 
 public enum UserRole {
     ADMINISTRATOR, STUDENT, PROFESSOR

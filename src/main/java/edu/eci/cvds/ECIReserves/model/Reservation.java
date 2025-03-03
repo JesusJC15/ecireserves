@@ -1,4 +1,4 @@
-package edu.eci.cvds.ECIReserves.model;
+package edu.eci.cvds.ecireserves.model;
 import java.time.LocalDate;
 import java.time.LocalTime;
 

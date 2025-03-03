@@ -1,4 +1,4 @@
-package edu.eci.cvds.ECIReserves.model;
+package edu.eci.cvds.ecireserves.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;

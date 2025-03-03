@@ -1,4 +1,4 @@
-package edu.eci.cvds.ECIReserves.exception;
+package edu.eci.cvds.ecireserves.exception;
 
 public class EciReservesException extends Exception {
     public static final String RESERVATION_ALREADY_EXISTS = "The reservation already exists";

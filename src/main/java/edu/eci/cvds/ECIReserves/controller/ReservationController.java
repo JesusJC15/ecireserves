@@ -1,4 +1,4 @@
-package edu.eci.cvds.ECIReserves.controller;
+package edu.eci.cvds.ecireserves.controller;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.eci.cvds.ECIReserves.dto.ReservationDTO;
-import edu.eci.cvds.ECIReserves.exception.EciReservesException;
-import edu.eci.cvds.ECIReserves.model.Reservation;
-import edu.eci.cvds.ECIReserves.model.ReservationStatus;
-import edu.eci.cvds.ECIReserves.service.ReservationService;
+import edu.eci.cvds.ecireserves.dto.ReservationDTO;
+import edu.eci.cvds.ecireserves.exception.EciReservesException;
+import edu.eci.cvds.ecireserves.model.Reservation;
+import edu.eci.cvds.ecireserves.model.ReservationStatus;
+import edu.eci.cvds.ecireserves.service.ReservationService;
 
 @RestController
 @RequestMapping("/api/reservations")
