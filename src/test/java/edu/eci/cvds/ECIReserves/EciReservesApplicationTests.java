@@ -59,7 +59,7 @@ class EciReservesApplicationTests {
 	@Test
 	void shouldFindAvailableLabsBetweenDates() {
 		Date start = new Date();
-		Date end = new Date(start.getTime() + 2 * 60 * 60 * 1000); // +2 horas
+		Date end = new Date(start.getTime() + 2 * 60 * 60 * 1000);
 		Laboratory lab = new Laboratory("1", "Lab A", 30, 10, "Descripcion", start, end);
 
 		when(laboratoryRepository.findByTimeBetween(start, end)).thenReturn(Collections.singletonList(lab));

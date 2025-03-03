@@ -13,18 +13,14 @@ import java.util.List;
 @Repository
 public interface LaboratoryRepository extends MongoRepository<Laboratory, String> {
 
-
     @Query("{ 'name' : ?0 }")
     List<Laboratory> findByName(String name);
-
-
 
     @Query("{ 'computers' : { $gte: ?0 } }")
     List<Laboratory> findByComputersGreaterThanEqual(int minComputers);
 
     @Query("{ 'openingTime' : { $gte: ?0 }, 'closingTime' : { $lte: ?1 } }")
     List<Laboratory> findByTimeBetween(Date start, Date end);
-
 
     List<Laboratory> findByOpeningTime(LocalDateTime openingTime);
 
