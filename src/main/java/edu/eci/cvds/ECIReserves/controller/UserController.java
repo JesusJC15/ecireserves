@@ -1,7 +1,6 @@
 package edu.eci.cvds.ecireserves.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -12,9 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.eci.cvds.ecireserves.dto.UserDTO;
+import edu.eci.cvds.ecireserves.exception.EciReservesException;
 import edu.eci.cvds.ecireserves.model.User;
 import edu.eci.cvds.ecireserves.service.UserService;
 
@@ -32,28 +33,23 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public Optional<User> getUserById(@PathVariable("id") String id) {
+    public User getUserById(@PathVariable("id") @RequestParam String id) throws EciReservesException {
         return userService.getUserById(id);
     }
 
-    @GetMapping("/{email}")
-    public Optional<User> getUserByEmail(@PathVariable("email") String email) {
-        return userService.getUserByEmail(email);
-    }
-
     @PostMapping
-    public User createUser(@RequestBody UserDTO userDTO) {
+    public User createUser(@RequestBody UserDTO userDTO) throws EciReservesException {
         return userService.createUser(userDTO);
     }
 
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable("id") String id, @RequestBody UserDTO userDTO) {
+    public User updateUser(@PathVariable("id") @RequestParam String id, @RequestBody UserDTO userDTO) throws EciReservesException {
         userService.updateUser(id, userDTO);
-        return userService.getUserById(id).orElse(null);
+        return userService.getUserById(id);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable("id") String id) {
+    public void deleteUser(@PathVariable("id") @RequestParam String id) throws EciReservesException {
         userService.deleteUser(id);
     }
 }

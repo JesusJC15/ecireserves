@@ -1,12 +1,12 @@
 package edu.eci.cvds.ecireserves.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.eci.cvds.ecireserves.dto.UserDTO;
+import edu.eci.cvds.ecireserves.exception.EciReservesException;
 import edu.eci.cvds.ecireserves.model.User;
 import edu.eci.cvds.ecireserves.repository.UserRepository;
 
@@ -20,42 +20,45 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public Optional<User> getUserById(String id) {
-        return userRepository.findById(id);
+    public User getUserById(String id) throws EciReservesException {
+        return userRepository.findById(id).orElseThrow(() -> new EciReservesException("User with id: " + id + EciReservesException.USER_NOT_FOUND));
     }
 
-    public Optional<User> getUserByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public User createUser(UserDTO userDTO) throws EciReservesException {
+        if(userRepository.findById(userDTO.getId()).isPresent()){
+            throw new EciReservesException("User with id: " + userDTO.getId() + EciReservesException.USER_ALREADY_EXISTS);
+        }else if(userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
+            throw new EciReservesException("User with email: " + userDTO.getEmail() + EciReservesException.USER_ALREADY_EXISTS);
+        }else{
+            User user = new User();
+            user.setId(userDTO.getId());
+            user.setName(userDTO.getName());
+            user.setEmail(userDTO.getEmail());
+            user.setPassword(userDTO.getPassword());
+            user.setRol(userDTO.getRol());
+    
+            return userRepository.save(user);
+        }
     }
 
-    public User createUser(UserDTO userDTO) {
-        User user = new User();
-        user.setId(userDTO.getId());
-        user.setName(userDTO.getName());
-        user.setEmail(userDTO.getEmail());
-        user.setPassword(userDTO.getPassword());
-        user.setRol(userDTO.getRol());
+    public User updateUser(String id, UserDTO userDTO) throws EciReservesException {
+        User user = userRepository.findById(id).orElseThrow(() -> new EciReservesException("User with id: " + id + EciReservesException.USER_NOT_FOUND));
+        if(userDTO.getName() != null) user.setName(userDTO.getName());
+        if(userDTO.getEmail() != null && !user.getEmail().equals(userDTO.getEmail())) {
+            if(userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
+                throw new EciReservesException("User with email: " + userDTO.getEmail() + EciReservesException.USER_ALREADY_EXISTS);
+            }
+            user.setEmail(userDTO.getEmail());
+        }
+        if(userDTO.getPassword() != null) user.setPassword(userDTO.getPassword());
 
         return userRepository.save(user);
     }
 
-    public User updateUser(String id, UserDTO userDTO) {
-        User user = userRepository.findById(id).orElse(null);
-        if(user != null) {
-            user.setName(userDTO.getName());
-            user.setEmail(userDTO.getEmail());
-            user.setPassword(userDTO.getPassword()); 
-         
-            return userRepository.save(user);
-        }else {
-            return null;
+    public void deleteUser(String id) throws EciReservesException {
+        if(!userRepository.existsById(id)){
+            throw new EciReservesException("User with id: " + id + " not found");
         }
-    }
-
-    public void deleteUser(String id) {
-        User user = userRepository.findById(id).orElse(null);
-        if(user != null) {
-            userRepository.delete(user);
-        }
+        userRepository.deleteById(id);
     }
 }
