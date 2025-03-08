@@ -18,7 +18,7 @@ public class Laboratory {
     @Id
     private String id;
     private String name;
-    private int capacity;
+    private Integer capacity;
     private Integer computers;
     private String description;
     private Date openingTime;

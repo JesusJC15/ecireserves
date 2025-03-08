@@ -8,43 +8,62 @@ import edu.eci.cvds.ECIReserves.repository.ReservationRepository;
 import edu.eci.cvds.ECIReserves.service.LaboratoryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.lang.reflect.Method;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
+
 @SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class EciReservesApplicationTests {
 
-	@Mock
+	@MockBean // <-- Usar @MockBean en lugar de @Mock
 	private LaboratoryRepository laboratoryRepository;
 
-	@Mock
+	@MockBean
 	private ReservationRepository reservationRepository;
 
-	@InjectMocks
-	private LaboratoryService laboratoryService;
-
-	@BeforeEach
-	void setUp() {
-		MockitoAnnotations.openMocks(this);
-	}
+	@Autowired
+	private LaboratoryService laboratoryService; // Ahora Spring lo inyecta con los @MockBean
 
 	@Test
-	void shouldAddLabWhenValid() {
-		Laboratory lab = new Laboratory("1", "Lab A", 30, 10, "Descripcion", new Date(), new Date(), Day.MONDAY);
-		when(laboratoryRepository.save(any(Laboratory.class))).thenReturn(lab);
+	void shouldAddLabWhenValid() throws ParseException {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date startDate = dateFormat.parse("2025-03-04 08:00:00");
+		Date endDate = dateFormat.parse("2025-03-04 18:00:00");
+
+		Laboratory lab = new Laboratory("1", "Lab A", 30, 10, "Descripcion", startDate, endDate, Day.MONDAY);
+
+		System.out.println("Lab antes de guardar: " + lab);
+
+		// Simula que el repositorio devuelve el mismo laboratorio al guardarlo
+		doReturn(lab).when(laboratoryRepository).save(any(Laboratory.class));
 
 		Laboratory result = laboratoryService.addLab(lab);
 
-		//assertNotNull(result);
-		//assertEquals("Lab A", result.getName());
+		verify(laboratoryRepository, times(1)).save(any(Laboratory.class));
+
+		assertNotNull(result);
+		assertEquals("Lab A", result.getName());
 	}
 
 
@@ -192,27 +211,24 @@ class EciReservesApplicationTests {
 
 	@Test
 	void shouldNotUpdateLabWithInvalidValues() {
-
 		Laboratory existingLab = new Laboratory("1", "Lab A", 30, 10, "Descripcion", new Date(), new Date(), Day.SATURDAY);
 
-
 		when(laboratoryRepository.findById("1")).thenReturn(Optional.of(existingLab));
-
 
 		Laboratory updatedLab = new Laboratory("1", null, -5, -3, null, null, null, null);
 
 		Laboratory result = laboratoryService.updateLab("1", updatedLab);
 
-
+		assertNotNull(result);
 		assertEquals(30, result.getCapacity());
 		assertEquals(10, result.getComputers());
 		assertEquals("Lab A", result.getName());
 		assertEquals("Descripcion", result.getDescription());
 
-
 		verify(laboratoryRepository, times(1)).findById("1");
-		verify(laboratoryRepository, times(1)).save(any(Laboratory.class));
+		verify(laboratoryRepository, never()).save(any(Laboratory.class));
 	}
+
 
 	@Test
 	void shouldThrowExceptionWhenUpdatingNonExistingLab() {
@@ -229,9 +245,9 @@ class EciReservesApplicationTests {
 
 		var result = laboratoryService.searchLabs("Lab A", 10, 5);
 
-		//assertFalse(result.isEmpty());
-		//assertEquals(1, result.size());
-		//assertEquals("Lab A", result.get(0).getName());
+		assertFalse(result.isEmpty());
+		assertEquals(1, result.size());
+		assertEquals("Lab A", result.get(0).getName());
 	}
 
 	@Test
@@ -242,6 +258,88 @@ class EciReservesApplicationTests {
 		var result = laboratoryService.searchLabs("Unknown", 50, 20);
 
 		assertTrue(result.isEmpty());
+	}
+
+	@Test
+	void testConvertToDateUsingReflection() throws Exception {
+		LocalDateTime now = LocalDateTime.now();
+
+		Method method = LaboratoryService.class.getDeclaredMethod("convertToDate", LocalDateTime.class);
+		method.setAccessible(true); // Habilita el acceso al método privado
+
+		Date result = (Date) method.invoke(laboratoryService, now);
+		assertNotNull(result);
+	}
+
+	@Test
+	void testUpdateFieldIfValid_withConditionUsingReflection() throws Exception {
+		String[] field = {null};
+		Consumer<String> setter = value -> field[0] = value;
+		Predicate<String> condition = value -> value.length() > 3;
+
+		Method method = LaboratoryService.class.getDeclaredMethod("updateFieldIfValid", Object.class, Consumer.class, Predicate.class);
+		method.setAccessible(true);
+
+		method.invoke(laboratoryService, "ValidName", setter, condition);
+
+		assertEquals("ValidName", field[0]);
+	}
+
+	@Test
+	void testUpdateFieldIfValid_withoutConditionUsingReflection() throws Exception {
+		String[] field = {null};
+		Consumer<String> setter = value -> field[0] = value;
+
+		Method method = LaboratoryService.class.getDeclaredMethod("updateFieldIfValid", Object.class, Consumer.class);
+		method.setAccessible(true);
+
+		method.invoke(laboratoryService, "UpdatedValue", setter);
+
+		assertEquals("UpdatedValue", field[0]);
+	}
+
+
+
+	@Test
+	void testGetLabsByName() {
+		Laboratory lab1 = new Laboratory();
+		lab1.setName("Test Lab");
+		when(laboratoryRepository.findByName("Test Lab")).thenReturn(Arrays.asList(lab1));
+
+		List<Laboratory> result = laboratoryService.getLabsByName("Test Lab");
+		assertEquals(1, result.size());
+		assertEquals("Test Lab", result.get(0).getName());
+	}
+
+	@Test
+	void testGetLabsByCapacity() {
+		when(laboratoryRepository.findByCapacityGreaterThanEqual(10)).thenReturn(Arrays.asList(new Laboratory()));
+		assertFalse(laboratoryService.getLabsByCapacity(10).isEmpty());
+	}
+
+	@Test
+	void testGetLabsByComputers() {
+		when(laboratoryRepository.findByComputersGreaterThanEqual(5)).thenReturn(Arrays.asList(new Laboratory()));
+		assertFalse(laboratoryService.getLabsByComputers(5).isEmpty());
+	}
+
+	@Test
+	void testGetLabsByOpeningTime() {
+		LocalDateTime openingTime = LocalDateTime.of(2025, 3, 8, 8, 0);
+		when(laboratoryRepository.findByOpeningTime(openingTime)).thenReturn(Arrays.asList(new Laboratory()));
+		assertFalse(laboratoryService.getLabsByOpeningTime(openingTime).isEmpty());
+	}
+
+	@Test
+	void testGetLabsByClosingTime() {
+		LocalDateTime closingTime = LocalDateTime.of(2025, 3, 8, 18, 0);
+		when(laboratoryRepository.findByClosingTime(closingTime)).thenReturn(Arrays.asList(new Laboratory()));
+		assertFalse(laboratoryService.getLabsByClosingTime(closingTime).isEmpty());
+	}
+
+	@Test
+	void testGetRepository() {
+		assertNotNull(laboratoryService.getRepository());
 	}
 }
 
