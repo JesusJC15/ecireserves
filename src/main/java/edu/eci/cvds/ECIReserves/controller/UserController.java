@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.eci.cvds.ecireserves.dto.UserDTO;
@@ -33,7 +32,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable("id") @RequestParam String id) throws EciReservesException {
+    public User getUserById(@PathVariable("id") String id) throws EciReservesException {
         return userService.getUserById(id);
     }
 
@@ -43,13 +42,13 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable("id") @RequestParam String id, @RequestBody UserDTO userDTO) throws EciReservesException {
+    public User updateUser(@PathVariable("id") String id, @RequestBody UserDTO userDTO) throws EciReservesException {
         userService.updateUser(id, userDTO);
         return userService.getUserById(id);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable("id") @RequestParam String id) throws EciReservesException {
+    public void deleteUser(@PathVariable("id") String id) throws EciReservesException {
         userService.deleteUser(id);
     }
 }

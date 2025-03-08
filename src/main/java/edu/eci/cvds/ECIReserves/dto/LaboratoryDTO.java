@@ -1,21 +1,16 @@
-package edu.eci.cvds.ecireserves.model;
-
+package edu.eci.cvds.ecireserves.dto;
 
 import java.util.ArrayList;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
+import edu.eci.cvds.ecireserves.model.DaysOfWeek;
+import edu.eci.cvds.ecireserves.model.TimeSlot;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@Document(collection = "laboratories")
-public class Laboratory {
-    @Id
+public class LaboratoryDTO {
     private String id;
-
     private String classroom;
     private String name;
     private int capacity;

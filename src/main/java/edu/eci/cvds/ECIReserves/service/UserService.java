@@ -21,14 +21,14 @@ public class UserService {
     }
 
     public User getUserById(String id) throws EciReservesException {
-        return userRepository.findById(id).orElseThrow(() -> new EciReservesException("User with id: " + id + EciReservesException.USER_NOT_FOUND));
+        return userRepository.findById(id).orElseThrow(() -> new EciReservesException(EciReservesException.USER_NOT_FOUND));
     }
 
     public User createUser(UserDTO userDTO) throws EciReservesException {
         if(userRepository.findById(userDTO.getId()).isPresent()){
-            throw new EciReservesException("User with id: " + userDTO.getId() + EciReservesException.USER_ALREADY_EXISTS);
+            throw new EciReservesException(EciReservesException.USER_ALREADY_EXISTS);
         }else if(userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
-            throw new EciReservesException("User with email: " + userDTO.getEmail() + EciReservesException.USER_ALREADY_EXISTS);
+            throw new EciReservesException(EciReservesException.USER_EMAIL_ALREADY_EXISTS);
         }else{
             User user = new User();
             user.setId(userDTO.getId());
@@ -42,11 +42,11 @@ public class UserService {
     }
 
     public User updateUser(String id, UserDTO userDTO) throws EciReservesException {
-        User user = userRepository.findById(id).orElseThrow(() -> new EciReservesException("User with id: " + id + EciReservesException.USER_NOT_FOUND));
+        User user = userRepository.findById(id).orElseThrow(() -> new EciReservesException(EciReservesException.USER_NOT_FOUND));
         if(userDTO.getName() != null) user.setName(userDTO.getName());
         if(userDTO.getEmail() != null && !user.getEmail().equals(userDTO.getEmail())) {
             if(userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
-                throw new EciReservesException("User with email: " + userDTO.getEmail() + EciReservesException.USER_ALREADY_EXISTS);
+                throw new EciReservesException(EciReservesException.USER_ALREADY_EXISTS);
             }
             user.setEmail(userDTO.getEmail());
         }
@@ -57,7 +57,7 @@ public class UserService {
 
     public void deleteUser(String id) throws EciReservesException {
         if(!userRepository.existsById(id)){
-            throw new EciReservesException("User with id: " + id + " not found");
+            throw new EciReservesException(EciReservesException.USER_NOT_FOUND);
         }
         userRepository.deleteById(id);
     }

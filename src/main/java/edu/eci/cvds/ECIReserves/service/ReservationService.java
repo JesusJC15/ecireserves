@@ -49,13 +49,16 @@ public class ReservationService {
         Reservation reservation = new Reservation();
         reservation.setUserId(reservationDTO.getUserId());
         reservation.setLaboratoryId(reservationDTO.getLaboratoryId());
-        reservation.setStartDate(reservationDTO.getStartDate());
-        reservation.setEndDate(reservationDTO.getEndDate());
+        reservation.setDate(reservationDTO.getDate());
         reservation.setStartTime(reservationDTO.getStartTime());
         reservation.setEndTime(reservationDTO.getEndTime());
         reservation.setPurpose(reservationDTO.getPurpose());
 
         return reservationRepository.save(reservation);
+    }
+
+    public Reservation updateReservation(String id, ReservationDTO reservationDTO) throws EciReservesException {
+        return null;
     }
 
     public void deleteReservation(String id) {
