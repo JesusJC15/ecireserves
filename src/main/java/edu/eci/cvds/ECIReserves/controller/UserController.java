@@ -19,8 +19,8 @@ public class UserController {
     }
 
     @GetMapping("/{name}")
-    public User getUserByName(@PathVariable String id) {
-        return userService.getUser(id);
+    public User getUserByName( @PathVariable String name) {
+        return userService.getUser(name);
     }
 
     @PostMapping

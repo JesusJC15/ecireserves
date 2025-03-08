@@ -5,15 +5,16 @@ import edu.eci.cvds.ECIReserves.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 
 @Service
 public class UserService {
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public boolean createUsers(User user){
         if(user.getId() == null || user.getEmail() == null || user.getEmail().isEmpty() || user.getId().isEmpty()
@@ -28,18 +29,15 @@ public class UserService {
     }
 
     public boolean updateUsers(String id,String name,String email,String password){
-        if(id == null || id.isEmpty() || name == null || name.isEmpty() || email == null || email.isEmpty() ||
-                password == null || password.isEmpty()){
+        User user = userRepository.findById(id).orElse(null);
+        if (user == null) {
             return false;
         }
 
-       User user = userRepository.findById(id).orElse(null);
-        if(user == null){
-            return false;
-        }
-        user.setName(name);
-        user.setEmail(email);
-        user.setPassword(password);
+        if (name != null && !name.trim().isEmpty()) user.setName(name);
+        if (email != null && !email.trim().isEmpty()) user.setEmail(email);
+        if (password != null && !password.trim().isEmpty()) user.setPassword(password);
+
         userRepository.save(user);
         return true;
     }

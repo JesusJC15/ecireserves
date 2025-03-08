@@ -1,31 +1,31 @@
 package edu.eci.cvds.ECIReserves.model;
 
-import lombok.Setter;
-import lombok.Getter;
+import lombok.*;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+@Setter
+@Getter
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Document(collection = "users")
 public class User {
-    @Setter
     @Id
     private String id;
-    @Setter
     private String name;
-    @Setter
     private String email;
-    @Setter
     private String password;
-    @Setter
     private Role role;
+
+    // Constructor
+    public User(String id, String name, String email, String password , Role role) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
 
     public String getId() {
         return id;
@@ -43,7 +43,27 @@ public class User {
         return password;
     }
 
+    // Setters
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public Role getRole() {
         return role;
+    }
+    public void setRole(Role role) {
+        this.role = role;
     }
 }
