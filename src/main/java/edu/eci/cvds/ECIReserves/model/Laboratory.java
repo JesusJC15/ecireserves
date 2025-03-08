@@ -7,6 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,5 +18,12 @@ public class Laboratory {
     @Id
     private String id;
     private String name;
-    private int capacity;
+    private Integer capacity;
+    private Integer computers;
+    private String description;
+    private Date openingTime;
+    private Date closingTime;
+    private Day day;
+
+
 }
