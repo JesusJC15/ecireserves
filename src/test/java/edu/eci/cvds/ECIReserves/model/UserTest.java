@@ -1,4 +1,4 @@
-package edu.eci.cvds.ecireserves.model;
+package edu.eci.cvds.ECIReserves.model;
 
 public class UserTest {
 
