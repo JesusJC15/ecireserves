@@ -1,8 +1,4 @@
-package edu.eci.cvds.ecireserves.model;
-
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
+package edu.eci.cvds.ecireserves.dto;
 
 import edu.eci.cvds.ecireserves.enums.UserRole;
 import lombok.AllArgsConstructor;
@@ -14,13 +10,10 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "users")
-public class User {
-    @Id
-    private String id;
+public class UserDTO {
 
+    private String id;
     private String name;
-    @Indexed(unique = true)
     private String email;
     private String password;
     private UserRole rol;

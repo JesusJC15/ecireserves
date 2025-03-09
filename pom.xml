@@ -6,12 +6,12 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.2</version>
+		<version>3.4.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
 	<groupId>edu.eci.cvds</groupId>
-	<artifactId>ecireserves</artifactId>
+	<artifactId>ECIReserves</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ecireserves</name>
 	<description>Laboratory reservation system for the Deanship of Systems Engineering</description>
@@ -31,8 +31,6 @@
 
 	<properties>
 		<java.version>17</java.version>
-		<maven.compiler.source>1.17</maven.compiler.source>
-		<maven.compiler.target>1.17</maven.compiler.target>
 	</properties>
 
 	<dependencies>
@@ -52,7 +50,7 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
-        </dependency>
+    </dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
