@@ -79,4 +79,3 @@ public class LaboratoryController {
         return ResponseEntity.ok(new ApiResponse<>(true, "Laboratorio eliminado", null));
     }
 }
-   

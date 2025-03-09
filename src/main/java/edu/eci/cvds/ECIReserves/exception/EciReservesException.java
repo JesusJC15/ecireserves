@@ -11,7 +11,6 @@ public class EciReservesException extends Exception {
     public static final String LABORATORY_ALREADY_EXISTS = "El laboratorio ya existe";
     public static final String LABORATORY_NOT_AVAILABLE = "El laboratorio no esta disponible";
     public static final String INVALID_TIMESLOT = "La franja horaria no es valida";
-    
 
     public EciReservesException(String message) {
         super(message);
