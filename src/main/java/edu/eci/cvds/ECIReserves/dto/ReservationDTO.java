@@ -18,6 +18,8 @@ public class ReservationDTO {
     private String laboratoryId;
     private LocalDate date;
     private LocalTime startTime;
-    private LocalTime endTime;
+    private Integer duration;
+    private LocalTime newStartLocalTime;
+    private Integer newDuration;
     private String purpose;
 }

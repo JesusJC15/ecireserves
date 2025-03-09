@@ -1,6 +1,6 @@
 package edu.eci.cvds.ecireserves.dto;
 
-import edu.eci.cvds.ecireserves.model.UserRole;
+import edu.eci.cvds.ecireserves.enums.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -17,6 +17,7 @@ import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import edu.eci.cvds.ecireserves.dto.UserDTO;
+import edu.eci.cvds.ecireserves.enums.UserRole;
 import edu.eci.cvds.ecireserves.exception.EciReservesException;
 import edu.eci.cvds.ecireserves.repository.UserRepository;
 import edu.eci.cvds.ecireserves.service.UserService;
@@ -35,8 +36,8 @@ class UserServiceTest {
 
     @BeforeEach
     void setUp() {
-        user = new User("1", "John Doe", "johndoe@example.com", "password123", UserRole.STUDENT);
-        userDTO = new UserDTO("1", "John Doe", "johndoe@example.com", "password123", UserRole.STUDENT);
+        user = new User("1", "John Doe", "johndoe@example.com", "password123", UserRole.ESTUDIANTE);
+        userDTO = new UserDTO("1", "John Doe", "johndoe@example.com", "password123", UserRole.ESTUDIANTE);
     }
 
     @Test

@@ -1,9 +1,8 @@
 package edu.eci.cvds.ecireserves.dto;
 
-import java.util.List;
+import java.time.LocalTime;
 
-import edu.eci.cvds.ecireserves.model.DaysOfWeek;
-import edu.eci.cvds.ecireserves.model.TimeSlot;
+import edu.eci.cvds.ecireserves.enums.DaysOfWeek;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +19,7 @@ public class LaboratoryDTO {
     private int capacity;
     private String description;
     private DaysOfWeek day;
-    private List<TimeSlot> timeSlots;
-    private List<Boolean> availables;
+    private LocalTime openingTime;
+    private LocalTime closingTime;
+    private boolean available;
 }

@@ -7,8 +7,9 @@ import java.util.List;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
+import edu.eci.cvds.ecireserves.enums.ReservationStatus;
 import edu.eci.cvds.ecireserves.model.Reservation;
-import edu.eci.cvds.ecireserves.model.ReservationStatus;
+
 
 @Repository
 public interface ReservationRepository extends MongoRepository<Reservation, String> {
@@ -16,7 +17,7 @@ public interface ReservationRepository extends MongoRepository<Reservation, Stri
     List<Reservation> findByLaboratoryId(String laboratoryId);
     List<Reservation> findByStatus(ReservationStatus status);
     List<Reservation> findByUserIdAndStatus(String userId, ReservationStatus status);
-    List<Reservation> findByLaboratoryIdAndDate(String laboratoryId, LocalDate date);
-    boolean existsByLaboratoryIdAndStartTimeBetween(String laboratoryId, LocalTime startTime, LocalTime endTime);
-
+    List<Reservation> findByDate(LocalDate date);
+    List<Reservation> findByStartTime(LocalTime startTime);
+    List<Reservation> findByDuration(Integer duration);
 }
