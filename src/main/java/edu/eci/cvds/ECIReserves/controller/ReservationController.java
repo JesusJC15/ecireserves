@@ -1,7 +1,6 @@
 package edu.eci.cvds.ecireserves.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -9,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,7 +32,7 @@ public class ReservationController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Reservation> getReservationById(@PathVariable("id") String id) {
+    public Reservation getReservationById(@PathVariable String id) throws EciReservesException {
         return reservationService.getReservationById(id);
     }
 
@@ -56,15 +56,18 @@ public class ReservationController {
         return reservationService.getReservationsByUserIdAndStatus(userId, status);
     }
 
-    //More GET methods can be added
-
     @PostMapping
     public Reservation createReservation(@RequestBody ReservationDTO reservationDTO) throws EciReservesException {
         return reservationService.createReservation(reservationDTO);
     }
 
+    @PutMapping("/{id}")
+    public Reservation updateReservation(@PathVariable("id") String id, @RequestBody ReservationDTO reservationDTO) throws EciReservesException {
+        return reservationService.updateReservation(id, reservationDTO);
+    }
+
     @DeleteMapping("/{id}")
-    public void deleteReservation(@PathVariable("id") String id) {
+    public void deleteReservation(@PathVariable("id") String id) throws EciReservesException {
         reservationService.deleteReservation(id);
     }
 }

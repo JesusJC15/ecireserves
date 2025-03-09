@@ -8,9 +8,16 @@ public class EciReservesException extends Exception {
     public static final String RESERVATION_NOT_FOUND = "Reservation not found";
     public static final String LABORATORY_ALREADY_RESERVED = "The laboratory is already reserved";
     public static final String LABORATORY_NOT_FOUND = "Laboratory not found";
+    public static final String LABORATORY_ALREADY_EXISTS = "Laboratory already exists";
+    public static final String LABORATORY_NOT_AVAILABLE = "Laboratory not available";
+    
 
     public EciReservesException(String message) {
         super(message);
     }
 
+    @Override
+    public String toString() {
+        return getMessage();
+    }
 }

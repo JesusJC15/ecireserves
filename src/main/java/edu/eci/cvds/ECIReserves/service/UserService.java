@@ -24,6 +24,10 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new EciReservesException(EciReservesException.USER_NOT_FOUND));
     }
 
+    public List<User> getUsersByName(String name) {
+        return userRepository.findByName(name);
+    }
+
     public User createUser(UserDTO userDTO) throws EciReservesException {
         if(userRepository.findById(userDTO.getId()).isPresent()){
             throw new EciReservesException(EciReservesException.USER_ALREADY_EXISTS);

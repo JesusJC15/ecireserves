@@ -16,8 +16,7 @@ public interface ReservationRepository extends MongoRepository<Reservation, Stri
     List<Reservation> findByLaboratoryId(String laboratoryId);
     List<Reservation> findByStatus(ReservationStatus status);
     List<Reservation> findByUserIdAndStatus(String userId, ReservationStatus status);
-    List<Reservation> findByLaboratoryIdAndStartTimeBetween(String laboratoryId, LocalTime startTime, LocalTime endTime);
-    Reservation findByLaboratoryIdAndStartDateAndEndDateAndStartTimeAndEndTime(String laboratoryId, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime);
-    //More methods can be added
+    List<Reservation> findByLaboratoryIdAndDate(String laboratoryId, LocalDate date);
+    boolean existsByLaboratoryIdAndStartTimeBetween(String laboratoryId, LocalTime startTime, LocalTime endTime);
 
 }

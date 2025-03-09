@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.eci.cvds.ecireserves.dto.UserDTO;
@@ -35,6 +36,12 @@ public class UserController {
     public User getUserById(@PathVariable("id") String id) throws EciReservesException {
         return userService.getUserById(id);
     }
+
+    @GetMapping("/search")
+    public List<User> getUsersByName(@RequestParam String name) {
+        return userService.getUsersByName(name);
+    }
+    
 
     @PostMapping
     public User createUser(@RequestBody UserDTO userDTO) throws EciReservesException {

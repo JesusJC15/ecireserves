@@ -1,16 +1,19 @@
 package edu.eci.cvds.ecireserves.model;
 
-
-import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Document(collection = "laboratories")
 public class Laboratory {
     @Id
@@ -21,6 +24,6 @@ public class Laboratory {
     private int capacity;
     private String description;
     private DaysOfWeek day;
-    private ArrayList<TimeSlot> timeSlots;
-    private ArrayList<Boolean> availables;
+    private List<TimeSlot> timeSlots;
+    private List<Boolean> availables;
 }
