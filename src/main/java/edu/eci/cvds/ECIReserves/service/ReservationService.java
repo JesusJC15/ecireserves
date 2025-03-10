@@ -112,7 +112,7 @@ public class ReservationService {
      */
     public Reservation createReservation(ReservationDTO reservationDTO) throws EciReservesException{
         Laboratory laboratory = laboratoryRepository.findById(reservationDTO.getLaboratoryId()).orElseThrow(() -> new EciReservesException(EciReservesException.LABORATORY_NOT_FOUND));
-        laboratory.setTimeSlot(reservationDTO.getStartTime(), reservationDTO.getStartTime().plusMinutes(reservationDTO.getDuration()));
+        laboratory.addTimeSlot(reservationDTO.getStartTime(), reservationDTO.getStartTime().plusMinutes(reservationDTO.getDuration()));
         laboratoryRepository.save(laboratory);
         Reservation reservation = new Reservation();
         reservation.setUserId(reservationDTO.getUserId());
@@ -144,7 +144,7 @@ public class ReservationService {
         }
         if(reservationDTO.getLaboratoryId() != null) {
             laboratory = laboratoryRepository.findById(reservationDTO.getLaboratoryId()).orElseThrow(() -> new EciReservesException(EciReservesException.LABORATORY_NOT_FOUND));
-            laboratory.setTimeSlot(reservationDTO.getStartTime(), reservationDTO.getStartTime().plusMinutes(reservationDTO.getDuration()));
+            laboratory.addTimeSlot(reservationDTO.getStartTime(), reservationDTO.getStartTime().plusMinutes(reservationDTO.getDuration()));
             laboratoryRepository.save(laboratory);
             reservation.setLaboratoryId(reservationDTO.getLaboratoryId());
         }

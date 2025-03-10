@@ -102,7 +102,6 @@
 						</goals>
 						<configuration>
 							<excludes>
-								<exclude></exclude>
 							</excludes>
 						</configuration>
 					</execution>

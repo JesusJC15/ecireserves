@@ -21,5 +21,4 @@ public class LaboratoryDTO {
     private DaysOfWeek day;
     private LocalTime openingTime;
     private LocalTime closingTime;
-    private boolean available;
 }

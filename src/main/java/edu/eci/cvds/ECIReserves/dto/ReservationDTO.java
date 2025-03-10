@@ -22,4 +22,13 @@ public class ReservationDTO {
     private LocalTime newStartLocalTime;
     private Integer newDuration;
     private String purpose;
+
+    public ReservationDTO(String userId, String laboratoryId, LocalDate date, LocalTime startTime, Integer duration, String purpose) {
+        this.userId = userId;
+        this.laboratoryId = laboratoryId;
+        this.date = date;
+        this.startTime = startTime;
+        this.duration = duration;
+        this.purpose = purpose;
+    }
 }

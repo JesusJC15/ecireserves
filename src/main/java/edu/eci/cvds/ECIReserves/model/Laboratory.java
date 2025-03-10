@@ -39,9 +39,15 @@ public class Laboratory {
      * @param endTime
      * @throws EciReservesException 
     */
-    public void setTimeSlot(LocalTime startTime, LocalTime endTime) throws EciReservesException {
-        if(startTime.isBefore(openingTime) || endTime.isAfter(closingTime)) {
+    public void addTimeSlot(LocalTime startTime, LocalTime endTime) throws EciReservesException {
+        if(startTime.isBefore(openingTime) || endTime.isAfter(closingTime) || !startTime.isBefore(endTime) || startTime.equals(endTime) ) {
             throw new EciReservesException(EciReservesException.INVALID_TIMESLOT);
+        }
+
+        for(TimeSlot slot : timeSlots){
+            if(slot.getStartTime().equals(startTime) && slot.getEndTime().equals(endTime)){
+                throw new EciReservesException(EciReservesException.TIMESLOT_ALREADY_EXISTS);
+            }
         }
         timeSlots.add(new TimeSlot(startTime, endTime));
         availables.add(false);

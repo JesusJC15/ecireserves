@@ -40,7 +40,7 @@ public class LaboratoryService {
      * @param classroom
      * @return List of laboratories
      */
-    public List<Laboratory> getLaboratoryByClassroom(String classroom) {
+    public List<Laboratory> getLaboratoriesByClassroom(String classroom) {
         return laboratoryRepository.findByClassroom(classroom);
     }
 
@@ -49,7 +49,7 @@ public class LaboratoryService {
      * @param name
      * @return List of laboratories
      */
-    public List<Laboratory> getLaboratoryByName(String name) {
+    public List<Laboratory> getLaboratoriesByName(String name) {
         return laboratoryRepository.findByName(name);
     }
 
@@ -58,7 +58,7 @@ public class LaboratoryService {
      * @param capacity
      * @return List of laboratories
      */
-    public List<Laboratory> getLaboratoryByCapacity(int capacity) {
+    public List<Laboratory> getLaboratoriesByCapacity(int capacity) {
         return laboratoryRepository.findByCapacity(capacity);
     }
 
@@ -67,7 +67,7 @@ public class LaboratoryService {
      * @param day
      * @return List of laboratories
      */
-    public List<Laboratory> getLaboratoryByDay(DaysOfWeek day) {
+    public List<Laboratory> getLaboratoriesByDay(DaysOfWeek day) {
         return laboratoryRepository.findByDay(day);
     }
 
@@ -76,7 +76,7 @@ public class LaboratoryService {
      * @param openingTime
      * @return List of laboratories
      */
-    public List<Laboratory> getLaboratoryByOpeningTime(LocalTime openingTime) {
+    public List<Laboratory> getLaboratoriesByOpeningTime(LocalTime openingTime) {
         return laboratoryRepository.findByOpeningTime(openingTime);
     }
 

@@ -6,8 +6,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import edu.eci.cvds.ecireserves.model.ApiResponse;
+import lombok.Generated;
 
 @RestControllerAdvice
+@Generated
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(EciReservesException.class)

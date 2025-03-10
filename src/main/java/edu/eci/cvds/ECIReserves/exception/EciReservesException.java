@@ -1,5 +1,8 @@
 package edu.eci.cvds.ecireserves.exception;
 
+import lombok.Generated;
+
+@Generated
 public class EciReservesException extends Exception {
     public static final String USER_ALREADY_EXISTS = "El usuario ya existe";
     public static final String USER_NOT_FOUND = "El usuario no existe";
@@ -11,6 +14,7 @@ public class EciReservesException extends Exception {
     public static final String LABORATORY_ALREADY_EXISTS = "El laboratorio ya existe";
     public static final String LABORATORY_NOT_AVAILABLE = "El laboratorio no esta disponible";
     public static final String INVALID_TIMESLOT = "La franja horaria no es valida";
+    public static final String TIMESLOT_ALREADY_EXISTS = "La franja horaria ya existe";
 
     public EciReservesException(String message) {
         super(message);

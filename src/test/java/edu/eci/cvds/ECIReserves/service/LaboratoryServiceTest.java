@@ -40,7 +40,7 @@ class LaboratoryServiceTest {
     void setUp() {
         laboratory = new Laboratory("1", "A101", "Computer Lab", 30, "Lab for programming", 
                                     DaysOfWeek.LUNES, LocalTime.of(8, 0), LocalTime.of(18, 0), List.of(), List.of());
-        laboratoryDTO = new LaboratoryDTO("1", "A101", "Computer Lab", 30, "Lab for programming", DaysOfWeek.LUNES, LocalTime.of(8, 0), LocalTime.of(18, 0), true);
+        laboratoryDTO = new LaboratoryDTO("1", "A101", "Computer Lab", 30, "Lab for programming", DaysOfWeek.LUNES, LocalTime.of(8, 0), LocalTime.of(18, 0));
     }
 
     @Test
@@ -77,7 +77,7 @@ class LaboratoryServiceTest {
     void shouldGetLaboratoryByClassroom() {
         when(laboratoryRepository.findByClassroom("A101")).thenReturn(List.of(laboratory));
     
-        List<Laboratory> labs = laboratoryService.getLaboratoryByClassroom("A101");
+        List<Laboratory> labs = laboratoryService.getLaboratoriesByClassroom("A101");
     
         assertFalse(labs.isEmpty());
         assertEquals(1, labs.size());
@@ -110,7 +110,7 @@ class LaboratoryServiceTest {
         when(laboratoryRepository.save(any(Laboratory.class))).thenReturn(laboratory);
 
         LaboratoryDTO updatedDTO = new LaboratoryDTO("1", "B202", "Updated Lab", 40, "New description",
-                                                     DaysOfWeek.MARTES, LocalTime.of(9, 0), LocalTime.of(19, 0), true);
+                                                     DaysOfWeek.MARTES, LocalTime.of(9, 0), LocalTime.of(19, 0));
         
         Laboratory updatedLab = laboratoryService.updateLaboratory("1", updatedDTO);
 
@@ -151,7 +151,7 @@ class LaboratoryServiceTest {
     void shouldGetLaboratoryByName() {
         when(laboratoryRepository.findByName("Computer Lab")).thenReturn(List.of(laboratory));
 
-        List<Laboratory> labs = laboratoryService.getLaboratoryByName("Computer Lab");
+        List<Laboratory> labs = laboratoryService.getLaboratoriesByName("Computer Lab");
 
         assertFalse(labs.isEmpty());
         assertEquals(1, labs.size());
@@ -162,7 +162,7 @@ class LaboratoryServiceTest {
     void shouldGetLaboratoryByCapacity() {
         when(laboratoryRepository.findByCapacity(30)).thenReturn(List.of(laboratory));
 
-        List<Laboratory> labs = laboratoryService.getLaboratoryByCapacity(30);
+        List<Laboratory> labs = laboratoryService.getLaboratoriesByCapacity(30);
 
         assertFalse(labs.isEmpty());
         assertEquals(30, labs.get(0).getCapacity());
@@ -172,7 +172,7 @@ class LaboratoryServiceTest {
     void shouldGetLaboratoryByDay() {
         when(laboratoryRepository.findByDay(DaysOfWeek.LUNES)).thenReturn(List.of(laboratory));
 
-        List<Laboratory> labs = laboratoryService.getLaboratoryByDay(DaysOfWeek.LUNES);
+        List<Laboratory> labs = laboratoryService.getLaboratoriesByDay(DaysOfWeek.LUNES);
 
         assertFalse(labs.isEmpty());
         assertEquals(DaysOfWeek.LUNES, labs.get(0).getDay());
@@ -182,7 +182,7 @@ class LaboratoryServiceTest {
     void shouldGetLaboratoryByOpeningTime() {
         when(laboratoryRepository.findByOpeningTime(LocalTime.of(8, 0))).thenReturn(List.of(laboratory));
 
-        List<Laboratory> labs = laboratoryService.getLaboratoryByOpeningTime(LocalTime.of(8, 0));
+        List<Laboratory> labs = laboratoryService.getLaboratoriesByOpeningTime(LocalTime.of(8, 0));
 
         assertFalse(labs.isEmpty());
         assertEquals(LocalTime.of(8, 0), labs.get(0).getOpeningTime());
