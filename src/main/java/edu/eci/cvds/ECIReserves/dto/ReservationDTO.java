@@ -14,6 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ReservationDTO {
 
+    private String id;
     private String userId;
     private String laboratoryId;
     private LocalDate date;
@@ -23,7 +24,8 @@ public class ReservationDTO {
     private Integer newDuration;
     private String purpose;
 
-    public ReservationDTO(String userId, String laboratoryId, LocalDate date, LocalTime startTime, Integer duration, String purpose) {
+    public ReservationDTO(String id, String userId, String laboratoryId, LocalDate date, LocalTime startTime, Integer duration, String purpose) {
+        this.id = id;
         this.userId = userId;
         this.laboratoryId = laboratoryId;
         this.date = date;

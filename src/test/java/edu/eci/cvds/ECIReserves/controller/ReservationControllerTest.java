@@ -98,7 +98,7 @@ class ReservationControllerTest {
 
     @Test
     void createReservation_ShouldReturnCreatedReservation() throws EciReservesException {
-        ReservationDTO reservationDTO = new ReservationDTO("user1", "lab1", LocalDate.now(), LocalTime.of(10, 0), 30, "Study");
+        ReservationDTO reservationDTO = new ReservationDTO("1", "user1", "lab1", LocalDate.now(), LocalTime.of(10, 0), 30, "Study");
         Reservation createdReservation = new Reservation("1", "user1", "lab1", LocalDate.now(), LocalTime.of(10, 0), 30, "Study", ReservationStatus.AGENDADA);
         when(reservationService.createReservation(reservationDTO)).thenReturn(createdReservation);
 
@@ -113,7 +113,7 @@ class ReservationControllerTest {
 
     @Test
     void updateReservation_ShouldReturnUpdatedReservation() throws EciReservesException {
-        ReservationDTO reservationDTO = new ReservationDTO("user1", "lab1", LocalDate.now(), LocalTime.of(11, 0), 30, "Updated Study");
+        ReservationDTO reservationDTO = new ReservationDTO("1", "user1", "lab1", LocalDate.now(), LocalTime.of(11, 0), 30, "Updated Study");
         Reservation updatedReservation = new Reservation("1", "user1", "lab1", LocalDate.now(), LocalTime.of(11, 0), 30, "Updated Study", ReservationStatus.AGENDADA);
         when(reservationService.updateReservation("1", reservationDTO)).thenReturn(updatedReservation);
 

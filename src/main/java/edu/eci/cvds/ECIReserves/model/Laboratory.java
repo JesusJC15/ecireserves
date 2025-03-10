@@ -44,9 +44,15 @@ public class Laboratory {
             throw new EciReservesException(EciReservesException.INVALID_TIMESLOT);
         }
 
-        for(TimeSlot slot : timeSlots){
-            if(slot.getStartTime().equals(startTime) && slot.getEndTime().equals(endTime)){
+        for (TimeSlot slot : timeSlots) {
+            if (slot.getStartTime().equals(startTime) && slot.getEndTime().equals(endTime)) {
                 throw new EciReservesException(EciReservesException.TIMESLOT_ALREADY_EXISTS);
+            } else if (
+                (slot.getStartTime().isBefore(startTime) && slot.getEndTime().isAfter(startTime)) ||
+                (slot.getStartTime().isBefore(endTime) && slot.getEndTime().isAfter(endTime)) ||
+                (startTime.isBefore(slot.getStartTime()) && endTime.isAfter(slot.getEndTime()))
+            ) {
+                throw new EciReservesException(EciReservesException.TIMESLOT_OVERLAPS);
             }
         }
         timeSlots.add(new TimeSlot(startTime, endTime));
@@ -58,6 +64,17 @@ public class Laboratory {
      * @param startTime
      * @param endTime
      */
+    public void removeTimeSlot(LocalTime startTime, LocalTime endTime, LocalTime newStartTime, LocalTime newEndTime) throws EciReservesException {
+        for (int i = 0; i < timeSlots.size(); i++) {
+            if (timeSlots.get(i).getStartTime().equals(startTime) && timeSlots.get(i).getEndTime().equals(endTime)) {
+                timeSlots.remove(i);
+                availables.remove(i);
+                addTimeSlot(newStartTime, newEndTime);
+                break;
+            }
+        }
+    }
+
     public void removeTimeSlot(LocalTime startTime, LocalTime endTime) {
         for (int i = 0; i < timeSlots.size(); i++) {
             if (timeSlots.get(i).getStartTime().equals(startTime) && timeSlots.get(i).getEndTime().equals(endTime)) {

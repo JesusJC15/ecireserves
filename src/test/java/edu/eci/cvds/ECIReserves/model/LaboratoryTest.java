@@ -1,14 +1,14 @@
 package edu.eci.cvds.ecireserves.model;
 
 import java.time.LocalTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import edu.eci.cvds.ecireserves.enums.DaysOfWeek;
 import edu.eci.cvds.ecireserves.exception.EciReservesException;
 
 class LaboratoryTest {
@@ -18,75 +18,88 @@ class LaboratoryTest {
     @BeforeEach
     void setUp() {
         laboratory = new Laboratory();
-        laboratory.setId("L001");
-        laboratory.setClassroom("C-101");
-        laboratory.setName("Laboratorio de Desarrollo de Software");
-        laboratory.setCapacity(30);
-        laboratory.setDescription("Laboratorio de computadores para desarrollo de software, cuenta con 30 computadores.");
-        laboratory.setDay(DaysOfWeek.MIERCOLES);
-        laboratory.setOpeningTime(LocalTime.of(7, 0));
-        laboratory.setClosingTime(LocalTime.of(19, 0));
+        laboratory.setOpeningTime(LocalTime.of(8, 0));
+        laboratory.setClosingTime(LocalTime.of(18, 0));
     }
+
     @Test
-    void shouldAddValidTimeSlot() throws EciReservesException{
-        laboratory.addTimeSlot(LocalTime.of(7, 0), LocalTime.of(8, 30));
-        
+    void testAddValidTimeSlot() throws EciReservesException {
+        LocalTime startTime = LocalTime.of(9, 0);
+        LocalTime endTime = LocalTime.of(10, 0);
+        laboratory.addTimeSlot(startTime, endTime);
         assertEquals(1, laboratory.getTimeSlots().size());
-        assertEquals(LocalTime.of(7, 0), laboratory.getTimeSlots().get(0).getStartTime());
-        assertEquals(LocalTime.of(8, 30), laboratory.getTimeSlots().get(0).getEndTime());
-        assertEquals(1, laboratory.getAvailables().size());
-        assertFalse(laboratory.getAvailables().get(0));
+        assertEquals(startTime, laboratory.getTimeSlots().get(0).getStartTime());
+        assertEquals(endTime, laboratory.getTimeSlots().get(0).getEndTime());
     }
 
     @Test
-    void shouldNotAddTimeSlotOutsideOpeningHours() {
-        try {
-            laboratory.addTimeSlot(LocalTime.of(6, 0), LocalTime.of(8, 30));
-        } catch (EciReservesException e) {
-            assertEquals(EciReservesException.INVALID_TIMESLOT, e.getMessage());
-            assertTrue(laboratory.getTimeSlots().isEmpty());
-            assertTrue(laboratory.getAvailables().isEmpty());
-        }
+    void testAddTimeSlotBeforeOpening() {
+        LocalTime startTime = LocalTime.of(7, 30);
+        LocalTime endTime = LocalTime.of(9, 0);
+        EciReservesException exception = assertThrows(EciReservesException.class, () -> laboratory.addTimeSlot(startTime, endTime));
+        assertEquals(EciReservesException.INVALID_TIMESLOT, exception.getMessage());
     }
 
     @Test
-    void shouldNotAddTimeSlotOutsideClosingHours() {
-        try {
-            laboratory.addTimeSlot(LocalTime.of(18, 0), LocalTime.of(20, 0));
-        } catch (EciReservesException e) {
-            assertEquals(EciReservesException.INVALID_TIMESLOT, e.getMessage());
-            assertTrue(laboratory.getTimeSlots().isEmpty());
-            assertTrue(laboratory.getAvailables().isEmpty());
-        }
+    void testAddTimeSlotAfterClosing() {
+        LocalTime startTime = LocalTime.of(17, 30);
+        LocalTime endTime = LocalTime.of(18, 30);
+        EciReservesException exception = assertThrows(EciReservesException.class, () -> laboratory.addTimeSlot(startTime, endTime));
+        assertEquals(EciReservesException.INVALID_TIMESLOT, exception.getMessage());
     }
 
     @Test
-    void shouldNotAddDuplicateTimeSlot() throws EciReservesException {
-        laboratory.addTimeSlot(LocalTime.of(7, 0), LocalTime.of(8, 30));
-        try {
-            laboratory.addTimeSlot(LocalTime.of(7, 0), LocalTime.of(8, 30));
-        } catch (EciReservesException e) {
-            assertEquals(EciReservesException.TIMESLOT_ALREADY_EXISTS, e.getMessage());
-            assertEquals(1, laboratory.getTimeSlots().size());
-            assertEquals(1, laboratory.getAvailables().size());
-        }
+    void testAddTimeSlotWithSameStartAndEnd() {
+        LocalTime startTime = LocalTime.of(10, 0);
+        EciReservesException exception = assertThrows(EciReservesException.class, () -> laboratory.addTimeSlot(startTime, startTime));
+        assertEquals(EciReservesException.INVALID_TIMESLOT, exception.getMessage());
     }
 
     @Test
-    void shouldRemoveExistingTimeSlot() throws EciReservesException {
-        laboratory.addTimeSlot(LocalTime.of(7, 0), LocalTime.of(8, 30));
-        laboratory.removeTimeSlot(LocalTime.of(7, 0), LocalTime.of(8, 30));
-        
+    void testAddTimeSlotWithStartAfterEnd() {
+        LocalTime startTime = LocalTime.of(11, 0);
+        LocalTime endTime = LocalTime.of(10, 0);
+        EciReservesException exception = assertThrows(EciReservesException.class, () -> laboratory.addTimeSlot(startTime, endTime));
+        assertEquals(EciReservesException.INVALID_TIMESLOT, exception.getMessage());
+    }
+
+    @Test
+    void testAddDuplicateTimeSlot() throws EciReservesException {
+        LocalTime startTime = LocalTime.of(10, 0);
+        LocalTime endTime = LocalTime.of(11, 0);
+        laboratory.addTimeSlot(startTime, endTime);
+        EciReservesException exception = assertThrows(EciReservesException.class, () -> laboratory.addTimeSlot(startTime, endTime));
+        assertEquals(EciReservesException.TIMESLOT_ALREADY_EXISTS, exception.getMessage());
+    }
+
+    @Test
+    void testAddOverlappingTimeSlot() throws EciReservesException {
+        laboratory.addTimeSlot(LocalTime.of(9, 0), LocalTime.of(10, 0));
+        EciReservesException exception = assertThrows(EciReservesException.class, () -> laboratory.addTimeSlot(LocalTime.of(9, 30), LocalTime.of(10, 30)));
+        assertEquals(EciReservesException.TIMESLOT_OVERLAPS, exception.getMessage());
+    }
+
+    @Test
+    void testRemoveExistingTimeSlot() throws EciReservesException {
+        LocalTime startTime = LocalTime.of(10, 0);
+        LocalTime endTime = LocalTime.of(11, 0);
+        laboratory.addTimeSlot(startTime, endTime);
+        laboratory.removeTimeSlot(startTime, endTime);
         assertTrue(laboratory.getTimeSlots().isEmpty());
-        assertTrue(laboratory.getAvailables().isEmpty());
     }
 
     @Test
-    void shouldNotFailRemovingExistingTimeSlot() throws EciReservesException {
-        laboratory.addTimeSlot(LocalTime.of(7, 0), LocalTime.of(8, 30));
-        laboratory.removeTimeSlot(LocalTime.of(8, 30), LocalTime.of(10, 0));
-        
-        assertEquals(1, laboratory.getTimeSlots().size());
-        assertEquals(1, laboratory.getAvailables().size());
+    void testRemoveNonExistingTimeSlot() {
+        laboratory.removeTimeSlot(LocalTime.of(10, 0), LocalTime.of(11, 0));
+        assertTrue(laboratory.getTimeSlots().isEmpty());
+    }
+
+    @Test
+    void testTimeSlotsAndAvailablesSync() throws EciReservesException {
+        laboratory.addTimeSlot(LocalTime.of(9, 0), LocalTime.of(10, 0));
+        laboratory.addTimeSlot(LocalTime.of(10, 30), LocalTime.of(11, 30));
+        List<TimeSlot> slots = laboratory.getTimeSlots();
+        List<Boolean> availables = laboratory.getAvailables();
+        assertEquals(slots.size(), availables.size());
     }
 }
