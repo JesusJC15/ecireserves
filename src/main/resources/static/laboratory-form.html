@@ -3,13 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrar Laboratorio</title>
+    <title>ECIReserves</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
-            margin: 20px;
-            padding: 20px;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #A02422;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
         form {
             background: white;
@@ -17,68 +31,63 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             max-width: 400px;
-            margin: auto;
+            width: 100%;
         }
-        input, button {
+        input, select, button {
             display: block;
             width: 100%;
             margin: 10px 0;
             padding: 8px;
         }
         button {
-            background: #28a745;
+            background: black;
             color: white;
             border: none;
             cursor: pointer;
         }
         button:hover {
-            background: #218838;
+            background: #333;
         }
     </style>
 </head>
 <body>
+<div class="header">ECIReserves</div>
+<div class="container">
+    <form id="lab-form">
+        <label for="id">ID:</label>
+        <input type="text" id="id" required>
 
-<h2 style="text-align: center;">Registrar Laboratorio</h2>
+        <label for="name">Nombre:</label>
+        <input type="text" id="name" required>
 
-<form id="lab-form">
-    <label for="id">ID:</label>
-    <input type="text" id="id" required>
+        <label for="capacity">Capacidad:</label>
+        <input type="number" id="capacity" required>
 
-    <label for="name">Nombre:</label>
-    <input type="text" id="name" required>
+        <label for="computers">Cantidad de Computadores:</label>
+        <input type="number" id="computers" required>
 
-    <label for="capacity">Capacidad:</label>
-    <input type="number" id="capacity" required>
+        <label for="description">Descripción:</label>
+        <input type="text" id="description" required>
 
-    <label for="computers">Cantidad de Computadores:</label>
-    <input type="number" id="computers" required>
+        <label for="openingTime">Hora de Apertura:</label>
+        <input type="datetime-local" id="openingTime" required>
 
-    <label for="description">Descripción:</label>
-    <input type="text" id="description" required>
+        <label for="closingTime">Hora de Cierre:</label>
+        <input type="datetime-local" id="closingTime" required>
 
-    <label for="openingTime">Hora de Apertura:</label>
-    <input type="datetime-local" id="openingTime" required>
+        <label for="day">Día:</label>
+        <select id="day" required>
+            <option value="MONDAY">Lunes</option>
+            <option value="TUESDAY">Martes</option>
+            <option value="WEDNESDAY">Miércoles</option>
+            <option value="THURSDAY">Jueves</option>
+            <option value="FRIDAY">Viernes</option>
+            <option value="SATURDAY">Sábado</option>
+            <option value="SUNDAY">Domingo</option>
+        </select>
 
-    <label for="closingTime">Hora de Cierre:</label>
-    <input type="datetime-local" id="closingTime" required>
-
-    <label for="day">Día:</label>
-    <select id="day" required>
-        <option value="MONDAY">Lunes</option>
-        <option value="TUESDAY">Martes</option>
-        <option value="WEDNESDAY">Miércoles</option>
-        <option value="THURSDAY">Jueves</option>
-        <option value="FRIDAY">Viernes</option>
-        <option value="SATURDAY">Sábado</option>
-        <option value="SUNDAY">Domingo</option>
-    </select>
-
-    <button type="submit">Registrar</button>
-</form>
-
-<script src="formulario.js"></script>
-
-
-
+        <button type="submit">Create</button>
+    </form>
+</div>
 </body>
 </html>

@@ -4,6 +4,7 @@ import edu.eci.cvds.ECIReserves.model.Laboratory;
 import edu.eci.cvds.ECIReserves.service.LaboratoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -62,5 +63,14 @@ public class LaboratoryController {
         List<Laboratory> labs = laboratoryService.getRepository().findAll();
         return ResponseEntity.ok(labs);
     }
+
+    @GetMapping("/list")
+    public String listLabs(Model model) {
+        List<Laboratory> labs = laboratoryService.getAllLabs();
+        model.addAttribute("laboratories", labs);
+        return "laboratory-list"; // Nombre del HTML
+    }
+
+
 }
 

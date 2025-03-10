@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Lista de Laboratorios</title>
+</head>
+<body>
+<h1>Laboratorios Disponibles</h1>
+<table border="1">
+  <tr>
+    <th>Nombre</th>
+    <th>Capacidad</th>
+    <th>Computadoras</th>
+    <th>Horario</th>
+  </tr>
+  <tr th:each="lab : ${laboratories}">
+    <td th:text="${lab.name}"></td>
+    <td th:text="${lab.capacity}"></td>
+    <td th:text="${lab.computers}"></td>
+    <td th:text="${lab.openingTime} + ' - ' + ${lab.closingTime}"></td>
+  </tr>
+</table>
+</body>
+</html>

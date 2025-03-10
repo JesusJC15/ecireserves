@@ -32,4 +32,7 @@ public interface LaboratoryRepository extends MongoRepository<Laboratory, String
 
     @Query("{ 'name': ?0, 'capacity': { $gte: ?1 }, 'computers': { $gte: ?2 } }")
     List<Laboratory> findByNameCapacityAndComputers(String name, Integer minCapacity, Integer minComputers);
+
+
+
 }
