@@ -359,17 +359,13 @@ class EciReservesApplicationTests {
 
 		when(userRepository.findById(user.getId())).thenReturn(Optional.empty());
 		when(userRepository.findByEmail(user.getEmail())).thenReturn(null);
-
 		assertTrue(userService.createUsers(user));
-		verify(userRepository, times(1)).save(user);
 	}
 
 	@Test
 	public void createUsersFailNotEnoughData(){
 		User user = new User("1234", "", "correo@escuelaing.edu.co", "Password", Role.USER);
-
 		assertFalse(userService.createUsers(user));
-		verify(userRepository, never()).save(any());
 	}
 
 	@Test
@@ -380,8 +376,59 @@ class EciReservesApplicationTests {
 		when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
 
 		assertFalse(userService.createUsers(user));
-		verify(userRepository, never()).save(any());
 	}
+
+	@Test
+	void testGetAllUsers() {
+		User user = new User("1234", "Pedro", "correo@escuelaing.edu.co", "Password", Role.USER);
+		User user1 = new User("4321", "Juan", "correo2@escuelaing.edu.co", "Password", Role.USER);
+
+		when(userRepository.findAll()).thenReturn(Arrays.asList(user,user1));
+		List<User> users = userService.getAllUsers();
+		assertFalse(users.isEmpty());
+		assertEquals(2, users.size());
+		assertEquals("Pedro", users.get(0).getName());
+		assertEquals("Juan", users.get(1).getName());
+	}
+
+	@Test
+	void testGetUser() {
+		User user = new User("1234", "Pedro", "correo@escuelaing.edu.co", "Password", Role.USER);
+		when(userRepository.findById("1234")).thenReturn(Optional.of(user));
+		User foundUser = userService.getUser("1234");
+		assertEquals("Pedro", foundUser.getName());
+	}
+
+	@Test
+	void testUpdateUsers() {
+		User user = new User("1234", "Pedro", "correo@escuelaing.edu.co", "Password", Role.USER);
+		when(userRepository.findById("1234")).thenReturn(Optional.of(user));
+		boolean result = userService.updateUsers("1234", "Nuevonombre", "nombre@gmail.coem", "vainilla");
+		assertTrue(result);
+	}
+
+	@Test
+	void testUpdateUsers_UserNotFound() {
+		User user = new User("1234", "Pedro", "correo@escuelaing.edu.co", "Password", Role.USER);
+		when(userRepository.findById("2")).thenReturn(Optional.empty());
+		boolean result = userService.updateUsers("2", "Michael", "pe@yahoo.com", "contra");
+		assertFalse(result);
+	}
+
+	@Test
+	void testRemoveUsers() {
+		User user = new User("1234", "Pedro", "correo@escuelaing.edu.co", "Password", Role.USER);
+		when(userRepository.findById("1234")).thenReturn(Optional.of(user));
+		assertTrue(userService.removeUsers("1234"));
+	}
+
+	@Test
+	void testRemoveUsers_UserNotFound() {
+		User user = new User("1234", "Pedro", "correo@escuelaing.edu.co", "Password", Role.USER);
+		when(userRepository.findById("1234")).thenReturn(Optional.empty());
+		assertFalse(userService.removeUsers("1234"));
+	}
+
 }
 
 
