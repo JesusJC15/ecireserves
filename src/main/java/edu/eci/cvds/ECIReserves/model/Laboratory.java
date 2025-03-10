@@ -1,6 +1,7 @@
 package edu.eci.cvds.ecireserves.model;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -29,8 +30,8 @@ public class Laboratory {
     private DaysOfWeek day;
     private LocalTime openingTime;
     private LocalTime closingTime;
-    private List<TimeSlot> timeSlots;
-    private List<Boolean> availables;
+    private List<TimeSlot> timeSlots = new ArrayList<>();
+    private List<Boolean> availables = new ArrayList<>();
 
     /**
      * Add a time slot to the laboratory and set it as available

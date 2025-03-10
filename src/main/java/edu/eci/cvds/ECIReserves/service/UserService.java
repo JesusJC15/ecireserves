@@ -36,10 +36,9 @@ public class UserService {
     }
 
     /**
-     * Get user by email
-     * @param email User email
+     * Get users by name
+     * @param name User name
      * @return List of users
-     * @throws EciReservesException
      */
     public List<User> getUsersByName(String name) {
         return userRepository.findByName(name);
@@ -90,7 +89,7 @@ public class UserService {
         if(userDTO.getName() != null) user.setName(userDTO.getName());
         if(userDTO.getEmail() != null && !user.getEmail().equals(userDTO.getEmail())) {
             if(userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
-                throw new EciReservesException(EciReservesException.USER_ALREADY_EXISTS);
+                throw new EciReservesException(EciReservesException.USER_EMAIL_ALREADY_EXISTS);
             }
             user.setEmail(userDTO.getEmail());
         }
