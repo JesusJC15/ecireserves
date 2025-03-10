@@ -13,6 +13,8 @@ import java.util.List;
 @Repository
 public interface LaboratoryRepository extends MongoRepository<Laboratory, String> {
 
+
+
     @Query("{ 'name' : ?0 }")
     List<Laboratory> findByName(String name);
 
