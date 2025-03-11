@@ -16,6 +16,7 @@ public class EciReservesException extends Exception {
     public static final String INVALID_TIMESLOT = "La franja horaria no es valida";
     public static final String TIMESLOT_ALREADY_EXISTS = "La franja horaria ya existe";
     public static final String TIMESLOT_OVERLAPS = "La franja horaria se superpone con otra";
+    public static final String TIMESLOT_NOT_FOUND = "La franja horaria no existe";
 
     public EciReservesException(String message) {
         super(message);

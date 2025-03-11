@@ -34,54 +34,78 @@ public class Laboratory {
     private List<Boolean> availables = new ArrayList<>();
 
     /**
-     * Add a time slot to the laboratory and set it as available
+     * Add a  valid time slot to the laboratory and set it as unavailable
      * @param startTime
      * @param endTime
      * @throws EciReservesException 
     */
     public void addTimeSlot(LocalTime startTime, LocalTime endTime) throws EciReservesException {
-        if(startTime.isBefore(openingTime) || endTime.isAfter(closingTime) || !startTime.isBefore(endTime) || startTime.equals(endTime) ) {
+        if (startTime.isBefore(openingTime) || endTime.isAfter(closingTime) || !startTime.isBefore(endTime)) {
             throw new EciReservesException(EciReservesException.INVALID_TIMESLOT);
         }
 
         for (TimeSlot slot : timeSlots) {
-            if (slot.getStartTime().equals(startTime) && slot.getEndTime().equals(endTime)) {
-                throw new EciReservesException(EciReservesException.TIMESLOT_ALREADY_EXISTS);
-            } else if (
-                (slot.getStartTime().isBefore(startTime) && slot.getEndTime().isAfter(startTime)) ||
-                (slot.getStartTime().isBefore(endTime) && slot.getEndTime().isAfter(endTime)) ||
-                (startTime.isBefore(slot.getStartTime()) && endTime.isAfter(slot.getEndTime()))
-            ) {
+            if (startTime.isBefore(slot.getEndTime()) && endTime.isAfter(slot.getStartTime())) {
                 throw new EciReservesException(EciReservesException.TIMESLOT_OVERLAPS);
             }
         }
+
         timeSlots.add(new TimeSlot(startTime, endTime));
         availables.add(false);
     }
 
     /**
-     * Remove a time slot from the laboratory and set it as unavailable
+     * Remove a time slot from the laboratory and add a new one
      * @param startTime
      * @param endTime
+     * @param newStartTime
+     * @param newEndTime
+     * @throws EciReservesException
      */
     public void removeTimeSlot(LocalTime startTime, LocalTime endTime, LocalTime newStartTime, LocalTime newEndTime) throws EciReservesException {
+        TimeSlot removedSlot = null;
+        int removedIndex = -1;
+    
         for (int i = 0; i < timeSlots.size(); i++) {
-            if (timeSlots.get(i).getStartTime().equals(startTime) && timeSlots.get(i).getEndTime().equals(endTime)) {
-                timeSlots.remove(i);
-                availables.remove(i);
-                addTimeSlot(newStartTime, newEndTime);
-                break;
-            }
-        }
-    }
-
-    public void removeTimeSlot(LocalTime startTime, LocalTime endTime) {
-        for (int i = 0; i < timeSlots.size(); i++) {
-            if (timeSlots.get(i).getStartTime().equals(startTime) && timeSlots.get(i).getEndTime().equals(endTime)) {
+            TimeSlot slot = timeSlots.get(i);
+            if (slot.getStartTime().equals(startTime) && slot.getEndTime().equals(endTime)) {
+                removedSlot = slot;
+                removedIndex = i;
                 timeSlots.remove(i);
                 availables.remove(i);
                 break;
             }
         }
+    
+        if (removedSlot == null) {
+            throw new EciReservesException(EciReservesException.TIMESLOT_NOT_FOUND);
+        }
+    
+        try {
+            addTimeSlot(newStartTime, newEndTime);
+        } catch (EciReservesException e) {
+            timeSlots.add(removedIndex, removedSlot);
+            availables.add(removedIndex, false);
+            throw e;
+        }
     }
+    
+    /**
+     * Remove a time slot from the laboratory
+     * @param startTime
+     * @param endTime
+     * @throws EciReservesException
+     */
+    public void removeTimeSlot(LocalTime startTime, LocalTime endTime) throws EciReservesException {
+        for (int i = 0; i < timeSlots.size(); i++) {
+            TimeSlot slot = timeSlots.get(i);
+            if (slot.getStartTime().equals(startTime) && slot.getEndTime().equals(endTime)) {
+                timeSlots.remove(i);
+                availables.remove(i);
+                return;
+            }
+        }
+        throw new EciReservesException(EciReservesException.TIMESLOT_NOT_FOUND);
+    }
+    
 }
