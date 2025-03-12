@@ -31,7 +31,7 @@ import edu.eci.cvds.ecireserves.model.Laboratory;
 import edu.eci.cvds.ecireserves.service.LaboratoryService;
 
 @ExtendWith(MockitoExtension.class)
-public class LaboratoryControllerTest {
+class LaboratoryControllerTest {
 
     @InjectMocks
     private LaboratoryController laboratoryController;
