@@ -23,7 +23,6 @@ import edu.eci.cvds.ecireserves.service.UserService;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin(origins = "*")
 public class UserController {
 
     @Autowired

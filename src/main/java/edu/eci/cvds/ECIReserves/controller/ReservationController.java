@@ -25,7 +25,6 @@ import edu.eci.cvds.ecireserves.service.ReservationService;
 
 @RestController
 @RequestMapping("/api/reservations")
-@CrossOrigin(origins = "*")
 public class ReservationController {
     @Autowired
     private ReservationService reservationService;
