@@ -60,7 +60,7 @@ class ReservationServiceTest {
         laboratory.setId("lab1");
         laboratory.setOpeningTime(LocalTime.of(8, 0));
         laboratory.setClosingTime(LocalTime.of(18, 0));
-        laboratory.setTimeSlots(new ArrayList<>()); // Agrega esto
+        laboratory.setTimeSlots(new ArrayList<>());
 
         reservationDTO = new ReservationDTO();
         reservationDTO.setUserId("user1");
@@ -205,7 +205,7 @@ class ReservationServiceTest {
         when(reservationRepository.findById("res123")).thenReturn(Optional.of(reservation));
         when(laboratoryRepository.findById("lab1")).thenReturn(Optional.of(laboratory));
         when(reservationRepository.save(any(Reservation.class))).thenReturn(reservation);
-
+        laboratory.addTimeSlot(reservation.getStartTime(), reservation.getStartTime().plusMinutes(reservation.getDuration()));
         reservationDTO.setNewStartLocalTime(LocalTime.of(11, 0));
         reservationDTO.setNewDuration(90);
         
@@ -228,7 +228,7 @@ class ReservationServiceTest {
     void shouldDeleteReservation() throws EciReservesException {
         when(reservationRepository.findById("res123")).thenReturn(Optional.of(reservation));
         when(laboratoryRepository.findById("lab1")).thenReturn(Optional.of(laboratory));
-
+        laboratory.addTimeSlot(reservation.getStartTime(), reservation.getStartTime().plusMinutes(reservation.getDuration()));
         reservationService.deleteReservation("res123");
 
         verify(reservationRepository, times(1)).deleteById("res123");

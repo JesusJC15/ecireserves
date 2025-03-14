@@ -141,17 +141,12 @@ public class ReservationService {
         Laboratory laboratory = laboratoryRepository.findById(reservationDTO.getLaboratoryId()).orElseThrow(() -> new EciReservesException(EciReservesException.LABORATORY_NOT_FOUND));
         reservation.setStatus(ReservationStatus.PENDIENTE);
         if(reservationDTO.getNewStartLocalTime() != null && reservationDTO.getNewDuration() != null){
-            laboratory.removeTimeSlot(reservation.getStartTime(), reservation.getStartTime().plusMinutes(reservation.getDuration()));
-            laboratoryRepository.save(laboratory);
+            laboratory.removeTimeSlot(reservation.getStartTime(), reservation.getStartTime().plusMinutes(reservation.getDuration()), reservationDTO.getNewStartLocalTime(), reservationDTO.getNewStartLocalTime().plusMinutes(reservationDTO.getNewDuration()));
             reservation.setStartTime(reservationDTO.getNewStartLocalTime());
             reservation.setDuration(reservationDTO.getNewDuration());
-        }
-        if(reservationDTO.getLaboratoryId() != null) {
-            laboratory = laboratoryRepository.findById(reservationDTO.getLaboratoryId()).orElseThrow(() -> new EciReservesException(EciReservesException.LABORATORY_NOT_FOUND));
-            laboratory.addTimeSlot(reservationDTO.getStartTime(), reservationDTO.getStartTime().plusMinutes(reservationDTO.getDuration()));
             laboratoryRepository.save(laboratory);
-            reservation.setLaboratoryId(reservationDTO.getLaboratoryId());
         }
+        if(reservationDTO.getLaboratoryId() != null) reservation.setLaboratoryId(reservationDTO.getLaboratoryId());
         if(reservationDTO.getDate() != null) reservation.setDate(reservationDTO.getDate());
         if(reservationDTO.getPurpose() != null) reservation.setPurpose(reservationDTO.getPurpose());
         reservation.setStatus(ReservationStatus.AGENDADA);
