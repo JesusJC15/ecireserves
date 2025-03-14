@@ -40,6 +40,7 @@ class ReservationControllerTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    @SuppressWarnings("null")
     @Test
     void getAllReservations_ShouldReturnListOfReservations() {
         List<Reservation> reservations = Arrays.asList(new Reservation("1", "u1", "l1", LocalDate.now(), LocalTime.now(), 30, "description", ReservationStatus.AGENDADA));
@@ -54,6 +55,7 @@ class ReservationControllerTest {
         verify(reservationService, times(1)).getAllReservations();
     }
 
+    @SuppressWarnings("null")
     @Test
     void getReservationsByUserId_ShouldReturnReservations() {
         List<Reservation> reservations = Arrays.asList(new Reservation("1", "user1", "lab1", LocalDate.now(), LocalTime.of(10, 0), 60, "Study", ReservationStatus.AGENDADA));
@@ -68,6 +70,7 @@ class ReservationControllerTest {
         verify(reservationService, times(1)).getReservationsByUserId("user1");
     }
 
+    @SuppressWarnings("null")
     @Test
     void getReservationsByLaboratoryId_ShouldReturnReservations() {
         List<Reservation> reservations = Arrays.asList(new Reservation("1", "user1", "lab1", LocalDate.now(), LocalTime.of(10, 0), 120, "Study", ReservationStatus.AGENDADA));
@@ -82,6 +85,7 @@ class ReservationControllerTest {
         verify(reservationService, times(1)).getReservationsByLaboratoryId("lab1");
     }
 
+    @SuppressWarnings("null")
     @Test
     void getReservationsByStatus_ShouldReturnReservations() {
         List<Reservation> reservations = Arrays.asList(new Reservation("1", "user1", "lab1", LocalDate.now(), LocalTime.of(10, 0), 30, "Study", ReservationStatus.AGENDADA));
@@ -96,6 +100,7 @@ class ReservationControllerTest {
         verify(reservationService, times(1)).getReservationsByStatus(ReservationStatus.AGENDADA);
     }
 
+    @SuppressWarnings("null")
     @Test
     void createReservation_ShouldReturnCreatedReservation() throws EciReservesException {
         ReservationDTO reservationDTO = new ReservationDTO("user1", "lab1", LocalDate.now(), LocalTime.of(10, 0), 30, "Study");
@@ -111,6 +116,7 @@ class ReservationControllerTest {
         verify(reservationService, times(1)).createReservation(reservationDTO);
     }
 
+    @SuppressWarnings("null")
     @Test
     void updateReservation_ShouldReturnUpdatedReservation() throws EciReservesException {
         ReservationDTO reservationDTO = new ReservationDTO("user1", "lab1", LocalDate.now(), LocalTime.of(11, 0), 30, "Updated Study");
@@ -126,6 +132,7 @@ class ReservationControllerTest {
         verify(reservationService, times(1)).updateReservation("1", reservationDTO);
     }
 
+    @SuppressWarnings("null")
     @Test
     void deleteReservation_ShouldReturnSuccessMessage() throws EciReservesException {
         doNothing().when(reservationService).deleteReservation("1");
@@ -138,6 +145,7 @@ class ReservationControllerTest {
         verify(reservationService, times(1)).deleteReservation("1");
     }
 
+    @SuppressWarnings("null")
     @Test
     void getReservationsByUserIdAndStatus_ShouldReturnReservations() {
         List<Reservation> reservations = Arrays.asList(
@@ -154,6 +162,7 @@ class ReservationControllerTest {
         verify(reservationService, times(1)).getReservationsByUserIdAndStatus("user1", ReservationStatus.AGENDADA);
     }
 
+    @SuppressWarnings("null")
     @Test
     void getReservationsByDuration_ShouldReturnReservations() {
         List<Reservation> reservations = Arrays.asList(
@@ -170,6 +179,7 @@ class ReservationControllerTest {
         verify(reservationService, times(1)).getReservationsByDuration(60);
     }
 
+    @SuppressWarnings("null")
     @Test
     void getReservationsByDate_ShouldReturnReservations() {
         LocalDate date = LocalDate.now();
@@ -187,6 +197,7 @@ class ReservationControllerTest {
         verify(reservationService, times(1)).getReservationsByDate(date);
     }
 
+    @SuppressWarnings("null")
     @Test
     void getReservationsByStartTime_ShouldReturnReservations() {
         LocalTime startTime = LocalTime.of(10, 0);

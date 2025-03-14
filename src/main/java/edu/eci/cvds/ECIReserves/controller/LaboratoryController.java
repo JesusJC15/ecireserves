@@ -25,8 +25,12 @@ import edu.eci.cvds.ecireserves.service.LaboratoryService;
 @RestController
 @RequestMapping("/api/laboratories")
 public class LaboratoryController {
+    private final LaboratoryService laboratoryService;
+
     @Autowired
-    private LaboratoryService laboratoryService;
+    public LaboratoryController(LaboratoryService laboratoryService) {
+        this.laboratoryService = laboratoryService;
+    }
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<Laboratory>>> getAllLaboratories() {
@@ -45,7 +49,7 @@ public class LaboratoryController {
     
     @GetMapping("/search")
     public ResponseEntity<ApiResponse<List<Laboratory>>> getLaboratoriesByName(@RequestParam String name) {
-        return ResponseEntity.ok(new ApiResponse<>(true, "Laboratorios encontrados", laboratoryService.getLaboratoriesByName(name)));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Laboratorios por nombre " + name + " encontrados", laboratoryService.getLaboratoriesByName(name)));
     }
 
     @GetMapping("/capacity/{capacity}")
