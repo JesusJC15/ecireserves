@@ -39,32 +39,32 @@ public class LaboratoryController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<Laboratory>> getLaboratoryById(@PathVariable("id") String id) throws EciReservesException {
-        return ResponseEntity.ok(new ApiResponse<>(true, "Laboratorio encontrado", laboratoryService.getLaboratoryById(id)));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Laboratorio con id " + id +  " encontrado", laboratoryService.getLaboratoryById(id)));
     }
 
     @GetMapping("/classroom/{classroom}")
     public ResponseEntity<ApiResponse<List<Laboratory>>> getLaboratoriesByClassroom(@PathVariable("classroom") String classroom) {
-        return ResponseEntity.ok(new ApiResponse<>(true, "Laboratorio encontrado", laboratoryService.getLaboratoriesByClassroom(classroom)));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Laboratorios del salon " + classroom, laboratoryService.getLaboratoriesByClassroom(classroom)));
     }
     
     @GetMapping("/search")
     public ResponseEntity<ApiResponse<List<Laboratory>>> getLaboratoriesByName(@RequestParam String name) {
-        return ResponseEntity.ok(new ApiResponse<>(true, "Laboratorios por nombre " + name + " encontrados", laboratoryService.getLaboratoriesByName(name)));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Laboratorios por nombre " + name, laboratoryService.getLaboratoriesByName(name)));
     }
 
     @GetMapping("/capacity/{capacity}")
     public ResponseEntity<ApiResponse<List<Laboratory>>> getLaboratoriesByCapacity(@PathVariable("capacity") int capacity) {
-        return ResponseEntity.ok(new ApiResponse<>(true, "Laboraorios encontrados", laboratoryService.getLaboratoriesByCapacity(capacity)));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Laboratorios de capacidad " + capacity, laboratoryService.getLaboratoriesByCapacity(capacity)));
     }
 
     @GetMapping("/day/{day}")
     public ResponseEntity<ApiResponse<List<Laboratory>>> getLaboratoriesByDay(@PathVariable("day") DaysOfWeek day) {
-        return ResponseEntity.ok(new ApiResponse<>(true, "Laboratorios encontrados", laboratoryService.getLaboratoriesByDay(day)));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Laboratorios del dia " + day, laboratoryService.getLaboratoriesByDay(day)));
     }
 
     @GetMapping("/opening-time/{openingTime}")
     public ResponseEntity<ApiResponse<List<Laboratory>>> getLaboratoriesByOpeningTime(@PathVariable("openingTime") LocalTime openingTime) {
-        return ResponseEntity.ok(new ApiResponse<>(true, "Laboratorios encontrados", laboratoryService.getLaboratoriesByOpeningTime(openingTime)));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Laboratorios que abren a las: " + openingTime.toString(), laboratoryService.getLaboratoriesByOpeningTime(openingTime)));
     }
 
     @PostMapping
