@@ -1,6 +1,6 @@
-package edu.eci.cvds.ecireserves.dto;
+package edu.eci.cvds.ECIReserves.dto;
 
-import edu.eci.cvds.ecireserves.enums.UserRole;
+import edu.eci.cvds.ECIReserves.enums.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

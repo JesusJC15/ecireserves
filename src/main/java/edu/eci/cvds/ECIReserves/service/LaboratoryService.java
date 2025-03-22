@@ -1,4 +1,4 @@
-package edu.eci.cvds.ecireserves.service;
+package edu.eci.cvds.ECIReserves.service;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -6,11 +6,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.eci.cvds.ecireserves.dto.LaboratoryDTO;
-import edu.eci.cvds.ecireserves.enums.DaysOfWeek;
-import edu.eci.cvds.ecireserves.exception.EciReservesException;
-import edu.eci.cvds.ecireserves.model.Laboratory;
-import edu.eci.cvds.ecireserves.repository.LaboratoryRepository;
+import edu.eci.cvds.ECIReserves.dto.LaboratoryDTO;
+import edu.eci.cvds.ECIReserves.enums.DaysOfWeek;
+import edu.eci.cvds.ECIReserves.exception.EciReservesException;
+import edu.eci.cvds.ECIReserves.model.Laboratory;
+import edu.eci.cvds.ECIReserves.repository.LaboratoryRepository;
 
 @Service
 public class LaboratoryService {

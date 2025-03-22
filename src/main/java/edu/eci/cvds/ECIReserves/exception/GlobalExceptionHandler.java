@@ -1,11 +1,11 @@
-package edu.eci.cvds.ecireserves.exception;
+package edu.eci.cvds.ECIReserves.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import edu.eci.cvds.ecireserves.model.ApiResponse;
+import edu.eci.cvds.ECIReserves.model.ApiResponse;
 import lombok.Generated;
 
 @RestControllerAdvice

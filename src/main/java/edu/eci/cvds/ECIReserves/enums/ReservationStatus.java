@@ -1,4 +1,4 @@
-package edu.eci.cvds.ecireserves.enums;
+package edu.eci.cvds.ECIReserves.enums;
 
 public enum ReservationStatus {
     AGENDADA, CANCELADA, EN_CURSO, FINALIZADA, PENDIENTE

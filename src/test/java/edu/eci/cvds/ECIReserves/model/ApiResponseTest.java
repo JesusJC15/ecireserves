@@ -1,4 +1,4 @@
-package edu.eci.cvds.ecireserves.model;
+package edu.eci.cvds.ECIReserves.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;

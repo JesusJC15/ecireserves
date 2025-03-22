@@ -1,26 +1,19 @@
-package edu.eci.cvds.ecireserves.controller;
+package edu.eci.cvds.ECIReserves.controller;
 
 import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import edu.eci.cvds.ecireserves.dto.LaboratoryDTO;
-import edu.eci.cvds.ecireserves.enums.DaysOfWeek;
-import edu.eci.cvds.ecireserves.exception.EciReservesException;
-import edu.eci.cvds.ecireserves.model.ApiResponse;
-import edu.eci.cvds.ecireserves.model.Laboratory;
-import edu.eci.cvds.ecireserves.service.LaboratoryService;
+import edu.eci.cvds.ECIReserves.dto.LaboratoryDTO;
+import edu.eci.cvds.ECIReserves.enums.DaysOfWeek;
+import edu.eci.cvds.ECIReserves.exception.EciReservesException;
+import edu.eci.cvds.ECIReserves.model.ApiResponse;
+import edu.eci.cvds.ECIReserves.model.Laboratory;
+import edu.eci.cvds.ECIReserves.service.LaboratoryService;
+
 
 @RestController
 @RequestMapping("/api/laboratories")

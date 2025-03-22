@@ -1,4 +1,4 @@
-package edu.eci.cvds.ecireserves.service;
+package edu.eci.cvds.ECIReserves.service;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,11 +17,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import edu.eci.cvds.ecireserves.dto.UserDTO;
-import edu.eci.cvds.ecireserves.enums.UserRole;
-import edu.eci.cvds.ecireserves.exception.EciReservesException;
-import edu.eci.cvds.ecireserves.model.User;
-import edu.eci.cvds.ecireserves.repository.UserRepository;
+import edu.eci.cvds.ECIReserves.dto.UserDTO;
+import edu.eci.cvds.ECIReserves.enums.UserRole;
+import edu.eci.cvds.ECIReserves.exception.EciReservesException;
+import edu.eci.cvds.ECIReserves.model.User;
+import edu.eci.cvds.ECIReserves.repository.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {

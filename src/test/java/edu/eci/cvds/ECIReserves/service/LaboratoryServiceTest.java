@@ -1,4 +1,4 @@
-package edu.eci.cvds.ecireserves.service;
+package edu.eci.cvds.ECIReserves.service;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -18,11 +18,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import edu.eci.cvds.ecireserves.dto.LaboratoryDTO;
-import edu.eci.cvds.ecireserves.enums.DaysOfWeek;
-import edu.eci.cvds.ecireserves.exception.EciReservesException;
-import edu.eci.cvds.ecireserves.model.Laboratory;
-import edu.eci.cvds.ecireserves.repository.LaboratoryRepository;
+import edu.eci.cvds.ECIReserves.dto.LaboratoryDTO;
+import edu.eci.cvds.ECIReserves.enums.DaysOfWeek;
+import edu.eci.cvds.ECIReserves.exception.EciReservesException;
+import edu.eci.cvds.ECIReserves.model.Laboratory;
+import edu.eci.cvds.ECIReserves.repository.LaboratoryRepository;
 
 @ExtendWith(MockitoExtension.class)
 class LaboratoryServiceTest {
