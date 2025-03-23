@@ -13,15 +13,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http
-            .csrf().disable()
+            .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/login", "api/auth/register").permitAll()
                 .anyRequest().authenticated()
-            )
+                )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
-            .formLogin().defaultSuccessUrl("/api/reservations", true)
-            .and()
-            .logout().logoutUrl("api/logout").logoutSuccessUrl("/api/auth/login");
+            .formLogin(login -> login.defaultSuccessUrl("/api/reservations", true))
+            .logout(logout -> logout.logoutUrl("api/logout").logoutSuccessUrl("/api/auth/login"));
         return http.build();
     }
 
