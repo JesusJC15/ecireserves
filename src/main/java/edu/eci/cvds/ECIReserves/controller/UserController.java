@@ -1,8 +1,10 @@
 package edu.eci.cvds.ECIReserves.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,7 +47,15 @@ public class UserController {
     public ResponseEntity<ApiResponse<List<User>>> getUsersByName(@RequestParam String name) {
         return ResponseEntity.ok(new ApiResponse<>(true, "Usuarios con nombre: " + name , userService.getUsersByName(name)));
     }
-    
+    @GetMapping("/email")
+    public ResponseEntity<ApiResponse<Optional<User>>> getUserByEmail(@RequestParam String email) {
+        Optional<User> user = userService.getUserByEmail(email);
+        if (user.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse<>(false, "Usuario no encontrado", null));
+        }
+        return ResponseEntity.ok(new ApiResponse<>(true, "Usuario encontrado", user));
+    }
     @PostMapping
     public ResponseEntity<ApiResponse<User>> createUser(@RequestBody UserDTO userDTO) throws EciReservesException {
         return ResponseEntity.ok(new ApiResponse<>(true, "Usuario creado", userService.createUser(userDTO)));
@@ -61,4 +71,6 @@ public class UserController {
         userService.deleteUser(id);
         return ResponseEntity.ok(new ApiResponse<>(true, "Usuario eliminado", null));
     }
+
+
 }

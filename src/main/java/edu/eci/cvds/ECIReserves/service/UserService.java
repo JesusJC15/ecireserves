@@ -1,6 +1,7 @@
 package edu.eci.cvds.ECIReserves.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -65,13 +66,11 @@ public class UserService {
      * @throws EciReservesException
      */
     public User createUser(UserDTO userDTO) throws EciReservesException {
-        if(userRepository.findById(userDTO.getId()).isPresent()){
-            throw new EciReservesException(EciReservesException.USER_ALREADY_EXISTS);
-        }else if(userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
+
+        if(userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
             throw new EciReservesException(EciReservesException.USER_EMAIL_ALREADY_EXISTS);
         }else{
             User user = new User();
-            user.setId(userDTO.getId());
             user.setName(userDTO.getName());
             user.setEmail(userDTO.getEmail());
             user.setPassword(userDTO.getPassword());
@@ -112,5 +111,9 @@ public class UserService {
             throw new EciReservesException(EciReservesException.USER_NOT_FOUND);
         }
         userRepository.deleteById(id);
+    }
+
+    public Optional<User> getUserByEmail(String email) {return userRepository.findByEmail(email);
+
     }
 }
