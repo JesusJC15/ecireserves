@@ -41,6 +41,7 @@ class AuthControllerTest {
         user = new User("1", "John Doe", "john@example.com", "encryptedPassword", UserRole.ESTUDIANTE);
     }
 
+    @SuppressWarnings("null")
     @Test
     void register_ShouldReturnCreatedUser() throws EciReservesException {
         when(authService.register(userDTO)).thenReturn(user);
@@ -66,6 +67,7 @@ class AuthControllerTest {
         verify(authService, times(1)).register(userDTO);
     }
 
+    @SuppressWarnings("null")
     @Test
     void login_ShouldReturnUser_WhenCredentialsAreCorrect() throws EciReservesException {
         when(authService.login(user.getEmail(), userDTO.getPassword())).thenReturn(user);
