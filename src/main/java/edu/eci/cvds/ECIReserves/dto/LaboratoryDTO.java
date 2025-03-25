@@ -1,8 +1,8 @@
-package edu.eci.cvds.ECIReserves.dto;
+package edu.eci.cvds.ecireserves.dto;
 
 import java.time.LocalTime;
 
-import edu.eci.cvds.ECIReserves.enums.DaysOfWeek;
+import edu.eci.cvds.ecireserves.enums.DaysOfWeek;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

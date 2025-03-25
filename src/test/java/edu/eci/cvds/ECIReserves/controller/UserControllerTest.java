@@ -1,4 +1,4 @@
-package edu.eci.cvds.ECIReserves.controller;
+package edu.eci.cvds.ecireserves.controller;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,12 +20,12 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import edu.eci.cvds.ECIReserves.dto.UserDTO;
-import edu.eci.cvds.ECIReserves.enums.UserRole;
-import edu.eci.cvds.ECIReserves.exception.EciReservesException;
-import edu.eci.cvds.ECIReserves.model.ApiResponse;
-import edu.eci.cvds.ECIReserves.model.User;
-import edu.eci.cvds.ECIReserves.service.UserService;
+import edu.eci.cvds.ecireserves.dto.UserDTO;
+import edu.eci.cvds.ecireserves.enums.UserRole;
+import edu.eci.cvds.ecireserves.exception.EciReservesException;
+import edu.eci.cvds.ecireserves.model.ApiResponse;
+import edu.eci.cvds.ecireserves.model.User;
+import edu.eci.cvds.ecireserves.service.UserService;
 
 class UserControllerTest {
 

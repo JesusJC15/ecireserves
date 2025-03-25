@@ -1,4 +1,4 @@
-package edu.eci.cvds.ECIReserves.dto;
+package edu.eci.cvds.ecireserves.dto;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

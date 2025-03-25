@@ -1,4 +1,4 @@
-package edu.eci.cvds.ECIReserves.repository;
+package edu.eci.cvds.ecireserves.repository;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -6,8 +6,8 @@ import java.util.List;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import edu.eci.cvds.ECIReserves.enums.DaysOfWeek;
-import edu.eci.cvds.ECIReserves.model.Laboratory;
+import edu.eci.cvds.ecireserves.enums.DaysOfWeek;
+import edu.eci.cvds.ecireserves.model.Laboratory;
 
 @Repository
 public interface LaboratoryRepository extends MongoRepository<Laboratory, String> {

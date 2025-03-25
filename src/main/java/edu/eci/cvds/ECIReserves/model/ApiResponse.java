@@ -1,4 +1,4 @@
-package edu.eci.cvds.ECIReserves.model;
+package edu.eci.cvds.ecireserves.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

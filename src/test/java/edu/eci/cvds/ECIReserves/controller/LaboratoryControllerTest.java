@@ -1,4 +1,4 @@
-package edu.eci.cvds.ECIReserves.controller;
+package edu.eci.cvds.ecireserves.controller;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -23,12 +23,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import edu.eci.cvds.ECIReserves.dto.LaboratoryDTO;
-import edu.eci.cvds.ECIReserves.enums.DaysOfWeek;
-import edu.eci.cvds.ECIReserves.exception.EciReservesException;
-import edu.eci.cvds.ECIReserves.model.ApiResponse;
-import edu.eci.cvds.ECIReserves.model.Laboratory;
-import edu.eci.cvds.ECIReserves.service.LaboratoryService;
+import edu.eci.cvds.ecireserves.dto.LaboratoryDTO;
+import edu.eci.cvds.ecireserves.enums.DaysOfWeek;
+import edu.eci.cvds.ecireserves.exception.EciReservesException;
+import edu.eci.cvds.ecireserves.model.ApiResponse;
+import edu.eci.cvds.ecireserves.model.Laboratory;
+import edu.eci.cvds.ecireserves.service.LaboratoryService;
 
 @ExtendWith(MockitoExtension.class)
 class LaboratoryControllerTest {

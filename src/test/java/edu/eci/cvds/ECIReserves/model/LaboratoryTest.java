@@ -1,4 +1,4 @@
-package edu.eci.cvds.ECIReserves.model;
+package edu.eci.cvds.ecireserves.model;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import edu.eci.cvds.ECIReserves.exception.EciReservesException;
+import edu.eci.cvds.ecireserves.exception.EciReservesException;
 
 class LaboratoryTest {
 

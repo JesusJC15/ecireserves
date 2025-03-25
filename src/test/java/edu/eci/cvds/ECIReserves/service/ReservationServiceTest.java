@@ -1,4 +1,4 @@
-package edu.eci.cvds.ECIReserves.service;
+package edu.eci.cvds.ecireserves.service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -19,13 +19,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 
-import edu.eci.cvds.ECIReserves.dto.ReservationDTO;
-import edu.eci.cvds.ECIReserves.enums.ReservationStatus;
-import edu.eci.cvds.ECIReserves.exception.EciReservesException;
-import edu.eci.cvds.ECIReserves.model.Laboratory;
-import edu.eci.cvds.ECIReserves.model.Reservation;
-import edu.eci.cvds.ECIReserves.repository.LaboratoryRepository;
-import edu.eci.cvds.ECIReserves.repository.ReservationRepository;
+import edu.eci.cvds.ecireserves.dto.ReservationDTO;
+import edu.eci.cvds.ecireserves.enums.ReservationStatus;
+import edu.eci.cvds.ecireserves.exception.EciReservesException;
+import edu.eci.cvds.ecireserves.model.Laboratory;
+import edu.eci.cvds.ecireserves.model.Reservation;
+import edu.eci.cvds.ecireserves.repository.LaboratoryRepository;
+import edu.eci.cvds.ecireserves.repository.ReservationRepository;
 
 class ReservationServiceTest {
 

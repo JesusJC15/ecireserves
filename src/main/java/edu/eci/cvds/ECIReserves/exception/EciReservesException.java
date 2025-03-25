@@ -1,4 +1,4 @@
-package edu.eci.cvds.ECIReserves.exception;
+package edu.eci.cvds.ecireserves.exception;
 
 import lombok.Generated;
 

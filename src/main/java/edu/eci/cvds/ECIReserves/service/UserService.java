@@ -1,4 +1,4 @@
-package edu.eci.cvds.ECIReserves.service;
+package edu.eci.cvds.ecireserves.service;
 
 import java.util.List;
 import java.util.Optional;
@@ -6,11 +6,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.eci.cvds.ECIReserves.dto.UserDTO;
-import edu.eci.cvds.ECIReserves.enums.UserRole;
-import edu.eci.cvds.ECIReserves.exception.EciReservesException;
-import edu.eci.cvds.ECIReserves.model.User;
-import edu.eci.cvds.ECIReserves.repository.UserRepository;
+import edu.eci.cvds.ecireserves.dto.UserDTO;
+import edu.eci.cvds.ecireserves.enums.UserRole;
+import edu.eci.cvds.ecireserves.exception.EciReservesException;
+import edu.eci.cvds.ecireserves.model.User;
+import edu.eci.cvds.ecireserves.repository.UserRepository;
 
 @Service
 public class UserService {

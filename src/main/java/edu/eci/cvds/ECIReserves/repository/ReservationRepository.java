@@ -1,4 +1,4 @@
-package edu.eci.cvds.ECIReserves.repository;
+package edu.eci.cvds.ecireserves.repository;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -7,8 +7,8 @@ import java.util.List;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import edu.eci.cvds.ECIReserves.enums.ReservationStatus;
-import edu.eci.cvds.ECIReserves.model.Reservation;
+import edu.eci.cvds.ecireserves.enums.ReservationStatus;
+import edu.eci.cvds.ecireserves.model.Reservation;
 
 
 @Repository
