@@ -2,9 +2,12 @@ package edu.eci.cvds.ecireserves.controller;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
@@ -154,5 +157,41 @@ class UserControllerTest {
 
         assertEquals("Usuario no encontrado", exception.getMessage());
         verify(userService, times(1)).deleteUser("99");
-}
+    }
+
+    @SuppressWarnings("null")
+    @Test
+    void getUserByEmail_ShouldReturnUser_WhenUserExists() {
+        User user = new User("1", "John Doe", "john@example.com", "password", UserRole.ESTUDIANTE);
+        when(userService.getUserByEmail("john@example.com")).thenReturn(Optional.of(user));
+
+        ResponseEntity<ApiResponse<Optional<User>>> response = userController.getUserByEmail("john@example.com");
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertTrue(response.getBody().isSuccess());
+        assertEquals("Usuario encontrado", response.getBody().getMessage());
+        assertTrue(response.getBody().getData().isPresent());
+        assertEquals("john@example.com", response.getBody().getData().get().getEmail());
+
+        verify(userService, times(1)).getUserByEmail("john@example.com");
+    }
+
+    @SuppressWarnings("null")
+    @Test
+    void getUserByEmail_ShouldReturnNotFound_WhenUserDoesNotExist() {
+        when(userService.getUserByEmail("notfound@example.com")).thenReturn(Optional.empty());
+
+        ResponseEntity<ApiResponse<Optional<User>>> response = userController.getUserByEmail("notfound@example.com");
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertFalse(response.getBody().isSuccess());
+        assertEquals("Usuario no encontrado", response.getBody().getMessage());
+        assertNull(response.getBody().getData());
+
+        verify(userService, times(1)).getUserByEmail("notfound@example.com");
+    }
 }
