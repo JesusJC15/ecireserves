@@ -178,7 +178,8 @@ class ReservationServiceTest {
     void shouldThrowExceptionWhenReservationNotFound() {
         when(reservationRepository.findById("invalidId")).thenReturn(Optional.empty());
 
-        assertThrows(EciReservesException.class, () -> reservationService.getReservationById("invalidId"));
+        EciReservesException exception = assertThrows(EciReservesException.class, () -> reservationService.getReservationById("invalidId"));
+        assertNotNull(exception);
     }
 
     @Test
@@ -197,7 +198,8 @@ class ReservationServiceTest {
     void shouldNotCreateReservationWhenLaboratoryNotFound() {
         when(laboratoryRepository.findById("lab1")).thenReturn(Optional.empty());
 
-        assertThrows(EciReservesException.class, () -> reservationService.createReservation(reservationDTO));
+        EciReservesException exception = assertThrows(EciReservesException.class, () -> reservationService.createReservation(reservationDTO));
+        assertNotNull(exception);
     }
 
     @Test
@@ -221,7 +223,8 @@ class ReservationServiceTest {
     void shouldNotUpdateReservationWhenNotFound() {
         when(reservationRepository.findById("invalidId")).thenReturn(Optional.empty());
 
-        assertThrows(EciReservesException.class, () -> reservationService.updateReservation("invalidId", reservationDTO));
+        EciReservesException exception = assertThrows(EciReservesException.class, () -> reservationService.updateReservation("invalidId", reservationDTO));
+        assertNotNull(exception);
     }
 
     @Test
@@ -238,6 +241,7 @@ class ReservationServiceTest {
     void shouldNotDeleteReservationWhenNotFound() {
         when(reservationRepository.findById("invalidId")).thenReturn(Optional.empty());
 
-        assertThrows(EciReservesException.class, () -> reservationService.deleteReservation("invalidId"));
+        EciReservesException exception = assertThrows(EciReservesException.class, () -> reservationService.deleteReservation("invalidId"));
+        assertNotNull(exception);
     }
 }
