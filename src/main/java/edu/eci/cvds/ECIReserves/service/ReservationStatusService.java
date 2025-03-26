@@ -7,11 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import edu.eci.cvds.ecireserves.enums.ReservationStatus;
 import edu.eci.cvds.ecireserves.model.Reservation;
 import edu.eci.cvds.ecireserves.repository.ReservationRepository;
 
 @Service
-public class ReservationCleanupService {
+public class ReservationStatusService {
 
     @Autowired
     private ReservationRepository reservationRepository;
@@ -19,9 +20,13 @@ public class ReservationCleanupService {
     @Scheduled(cron = "0 0 * * * ?")
     public void cleanupReservations() {
         LocalTime now = LocalTime.now();
-        List<Reservation> expired = reservationRepository.findByEndTimeBefore(now);
+        List<Reservation> expired = reservationRepository.findByEndTimeBeforeAndStatus(now, ReservationStatus.AGENDADA);
         if(!expired.isEmpty()) {
-            reservationRepository.deleteAll(expired);
+            for(Reservation reservation : expired) {
+                reservation.setStatus(ReservationStatus.FINALIZADA);
+                reservationRepository.save(reservation);
+            }
         }
     } 
 }
+
