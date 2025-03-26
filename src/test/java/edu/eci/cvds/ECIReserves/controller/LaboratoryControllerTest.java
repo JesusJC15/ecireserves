@@ -24,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import edu.eci.cvds.ecireserves.dto.LaboratoryDTO;
-import edu.eci.cvds.ecireserves.enums.DaysOfWeek;
+import edu.eci.cvds.ecireserves.enums.LaboratoryStatus;
 import edu.eci.cvds.ecireserves.exception.EciReservesException;
 import edu.eci.cvds.ecireserves.model.ApiResponse;
 import edu.eci.cvds.ecireserves.model.Laboratory;
@@ -44,16 +44,16 @@ class LaboratoryControllerTest {
     @BeforeEach
     void setUp() {
         sampleLabs = List.of(
-            new Laboratory("1", "A101", "Lab Redes", 30, "Laboratorio de Redes", DaysOfWeek.LUNES, LocalTime.of(7, 0), LocalTime.of(19, 0), new ArrayList<>(), new ArrayList<>()),
-            new Laboratory("2", "B202", "Lab Software", 25, "Laboratorio de Software", DaysOfWeek.MARTES, LocalTime.of(7, 0), LocalTime.of(19, 0), new ArrayList<>(), new ArrayList<>())
+            new Laboratory("1", "A101", "Lab Redes", 30, "Laboratorio de Redes", LocalTime.of(7, 0), LocalTime.of(19, 0), LaboratoryStatus.ACTIVO, new ArrayList<>(), Collections.emptyMap()),
+            new Laboratory("2", "B202", "Lab Software", 25, "Laboratorio de Software", LocalTime.of(7, 0), LocalTime.of(19, 0), LaboratoryStatus.ACTIVO, new ArrayList<>(), Collections.emptyMap())
         );
     }
 
     @SuppressWarnings("null")
     @Test
     void updateLaboratory_ShouldReturnUpdatedLaboratory_WhenExists() throws EciReservesException {
-        LaboratoryDTO laboratoryDTO = new LaboratoryDTO("L202", "B-202", "Lab Redes", 30, "Laboratorio de Redes", DaysOfWeek.LUNES, LocalTime.of(8, 0), LocalTime.of(18, 0));
-        Laboratory updatedLab = new Laboratory("L202", "B-202", "Lab Redes", 30, "Laboratorio de Redes", DaysOfWeek.LUNES, LocalTime.of(8, 0), LocalTime.of(18, 0), new ArrayList<>(), new ArrayList<>());
+        LaboratoryDTO laboratoryDTO = new LaboratoryDTO("L202", "B-202", "Lab Redes", 30, "Laboratorio de Redes", LocalTime.of(8, 0), LocalTime.of(18, 0), LaboratoryStatus.ACTIVO);
+        Laboratory updatedLab = new Laboratory("L202", "B-202", "Lab Redes", 30, "Laboratorio de Redes", LocalTime.of(8, 0), LocalTime.of(18, 0), LaboratoryStatus.ACTIVO, new ArrayList<>(), Collections.emptyMap());
 
         when(laboratoryService.updateLaboratory("L202", laboratoryDTO)).thenReturn(updatedLab);
 
@@ -68,7 +68,7 @@ class LaboratoryControllerTest {
 
     @Test
     void updateLaboratory_ShouldThrowException_WhenLaboratoryNotFound() throws EciReservesException {
-        LaboratoryDTO laboratoryDTO = new LaboratoryDTO("L202", "B-202", "Lab Redes", 30, "Laboratorio de Redes", DaysOfWeek.LUNES, LocalTime.of(8, 0), LocalTime.of(18, 0));
+        LaboratoryDTO laboratoryDTO = new LaboratoryDTO("L202", "B-202", "Lab Redes", 30, "Laboratorio de Redes", LocalTime.of(8, 0), LocalTime.of(18, 0), LaboratoryStatus.ACTIVO);
 
         when(laboratoryService.updateLaboratory("99", laboratoryDTO)).thenThrow(new EciReservesException("Laboratorio no encontrado"));
 
@@ -109,7 +109,7 @@ class LaboratoryControllerTest {
     @SuppressWarnings("null")
     @Test
     void getLaboratoryById_ShouldReturnLaboratory_WhenExists() throws EciReservesException {
-        Laboratory lab = new Laboratory("L202", "B-202", "Lab Redes", 30, "Laboratorio de Redes", DaysOfWeek.LUNES, LocalTime.of(8, 0), LocalTime.of(18, 0), new ArrayList<>(), new ArrayList<>());
+        Laboratory lab = new Laboratory("L202", "B-202", "Lab Redes", 30, "Laboratorio de Redes", LocalTime.of(8, 0), LocalTime.of(18, 0), LaboratoryStatus.ACTIVO, new ArrayList<>(), Collections.emptyMap());
 
         when(laboratoryService.getLaboratoryById("L202")).thenReturn(lab);
 
@@ -138,8 +138,8 @@ class LaboratoryControllerTest {
     @Test
     void getLaboratoryByCapacity_ShouldReturnLaboratories_WhenExists() {
         List<Laboratory> labs = List.of(
-            new Laboratory("1", "A101", "Lab Redes", 30, "Laboratorio de Redes", DaysOfWeek.LUNES, LocalTime.of(7, 0), LocalTime.of(19, 0), new ArrayList<>(), new ArrayList<>()),
-            new Laboratory("2", "A101", "Lab Redes", 30, "Laboratorio de Redes", DaysOfWeek.MARTES, LocalTime.of(7, 0), LocalTime.of(19, 0), new ArrayList<>(), new ArrayList<>())
+            new Laboratory("1", "A101", "Lab Redes", 30, "Laboratorio de Redes", LocalTime.of(7, 0), LocalTime.of(19, 0), LaboratoryStatus.ACTIVO, new ArrayList<>(), Collections.emptyMap()),
+            new Laboratory("2", "A101", "Lab Redes", 30, "Laboratorio de Redes", LocalTime.of(7, 0), LocalTime.of(19, 0), LaboratoryStatus.ACTIVO, new ArrayList<>(), Collections.emptyMap())
         );
 
         when(laboratoryService.getLaboratoriesByCapacity(30)).thenReturn(labs);
@@ -208,20 +208,6 @@ class LaboratoryControllerTest {
         assertEquals("Lab Redes", response.getBody().getData().get(0).getName());
         verify(laboratoryService, times(1)).getLaboratoriesByName("Lab Redes");
     }
-
-    @SuppressWarnings("null")
-    @Test
-    void getLaboratoryByDay_ShouldReturnLaboratories_WhenExists() {
-        when(laboratoryService.getLaboratoriesByDay(DaysOfWeek.LUNES)).thenReturn(List.of(sampleLabs.get(0)));
-
-        ResponseEntity<ApiResponse<List<Laboratory>>> response = laboratoryController.getLaboratoriesByDay(DaysOfWeek.LUNES);
-
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertTrue(response.getBody().isSuccess());
-        assertEquals(DaysOfWeek.LUNES, response.getBody().getData().get(0).getDay());
-        verify(laboratoryService, times(1)).getLaboratoriesByDay(DaysOfWeek.LUNES);
-    }
     
     @SuppressWarnings("null")
     @Test
@@ -243,8 +229,8 @@ class LaboratoryControllerTest {
     @SuppressWarnings("null")
     @Test
     void createLaboratory_ShouldReturnCreatedLaboratory() throws EciReservesException {
-        LaboratoryDTO laboratoryDTO = new LaboratoryDTO("L202", "B-202", "Lab Redes", 30, "Laboratorio de Redes", DaysOfWeek.LUNES, LocalTime.of(8, 0), LocalTime.of(18, 0));
-        Laboratory createdLab = new Laboratory("L202", "B-202", "Lab Redes", 30, "Laboratorio de Redes", DaysOfWeek.LUNES, LocalTime.of(8, 0), LocalTime.of(18, 0), new ArrayList<>(), new ArrayList<>());
+        LaboratoryDTO laboratoryDTO = new LaboratoryDTO("L202", "B-202", "Lab Redes", 30, "Laboratorio de Redes", LocalTime.of(8, 0), LocalTime.of(18, 0), LaboratoryStatus.ACTIVO);
+        Laboratory createdLab = new Laboratory("L202", "B-202", "Lab Redes", 30, "Laboratorio de Redes", LocalTime.of(8, 0), LocalTime.of(18, 0), LaboratoryStatus.ACTIVO, new ArrayList<>(), Collections.emptyMap());
         when(laboratoryService.createLaboratory(laboratoryDTO)).thenReturn(createdLab);
 
         ResponseEntity<ApiResponse<Laboratory>> response = laboratoryController.createLaboratory(laboratoryDTO);

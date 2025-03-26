@@ -1,5 +1,6 @@
 package edu.eci.cvds.ecireserves.controller;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.eci.cvds.ecireserves.dto.LaboratoryDTO;
-import edu.eci.cvds.ecireserves.enums.DaysOfWeek;
+import edu.eci.cvds.ecireserves.enums.LaboratoryStatus;
 import edu.eci.cvds.ecireserves.exception.EciReservesException;
 import edu.eci.cvds.ecireserves.model.ApiResponse;
 import edu.eci.cvds.ecireserves.model.Laboratory;
@@ -63,16 +64,22 @@ public class LaboratoryController {
         return ResponseEntity.ok(new ApiResponse<>(true, "Laboratorios de capacidad " + capacity, laboratoryService.getLaboratoriesByCapacity(capacity)));
     }
 
-    @GetMapping("/user/laboratories/day/{day}")
+    @GetMapping("/user/laboratories/date/{date}")
     @PreAuthorize("hasAnyRole('USUARIO', 'ADMINISTRADOR', 'PROFESOR')")
-    public ResponseEntity<ApiResponse<List<Laboratory>>> getLaboratoriesByDay(@PathVariable("day") DaysOfWeek day) {
-        return ResponseEntity.ok(new ApiResponse<>(true, "Laboratorios del dia " + day, laboratoryService.getLaboratoriesByDay(day)));
+    public ResponseEntity<ApiResponse<List<Laboratory>>> getLaboratoriesByDate(@PathVariable("date") LocalDate date) {
+        return ResponseEntity.ok(new ApiResponse<>(true, "Laboratorios del dia " + date, laboratoryService.getLaboratoriesByDate(date)));
     }
 
     @GetMapping("/user/laboratories/opening-time/{openingTime}")
     @PreAuthorize("hasAnyRole('USUARIO', 'ADMINISTRADOR', 'PROFESOR')")
     public ResponseEntity<ApiResponse<List<Laboratory>>> getLaboratoriesByOpeningTime(@PathVariable("openingTime") LocalTime openingTime) {
         return ResponseEntity.ok(new ApiResponse<>(true, "Laboratorios que abren a las: " + openingTime.toString(), laboratoryService.getLaboratoriesByOpeningTime(openingTime)));
+    }
+
+    @GetMapping("/user/laboratories/status/{status}")
+    @PreAuthorize("hasAnyRole('USUARIO', 'ADMINISTRADOR', 'PROFESOR')")
+    public ResponseEntity<ApiResponse<List<Laboratory>>> getLaboratoriesByStatus(@PathVariable("status") LaboratoryStatus status) {
+        return ResponseEntity.ok(new ApiResponse<>(true, "Laboratorios con estado " + status, laboratoryService.getLaboratoriesByStatus(status)));
     }
 
     @PostMapping("/admin/laboratories")

@@ -20,4 +20,5 @@ public interface ReservationRepository extends MongoRepository<Reservation, Stri
     List<Reservation> findByDate(LocalDate date);
     List<Reservation> findByStartTime(LocalTime startTime);
     List<Reservation> findByDuration(Integer duration);
+    List<Reservation> findByEndTimeBefore(LocalTime endTime);
 }
