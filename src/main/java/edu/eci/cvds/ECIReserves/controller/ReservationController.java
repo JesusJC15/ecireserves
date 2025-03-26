@@ -24,8 +24,7 @@ import edu.eci.cvds.ecireserves.model.Reservation;
 import edu.eci.cvds.ecireserves.service.ReservationService;
 
 @RestController
-@RequestMapping("/api/reservations")
-@PreAuthorize("isAuthenticated()")
+@RequestMapping("/api")
 public class ReservationController {
     private final ReservationService reservationService;
 
@@ -34,57 +33,58 @@ public class ReservationController {
         this.reservationService = reservationService;
     }
 
-    @GetMapping
+    @GetMapping("/user/reservations")
+    @PreAuthorize("hasAnyRole('USUARIO', 'ADMINISTRADOR', 'PROFESOR')")
     public ResponseEntity<ApiResponse<List<Reservation>>> getAllReservations() {
         return ResponseEntity.ok(new ApiResponse<>(true, "Reservas obtenidas exitosamente", reservationService.getAllReservations()));
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/user/reservations/{userId}")
     public ResponseEntity<ApiResponse<List<Reservation>>> getReservationsByUserId(@PathVariable("userId") String userId) {
         return ResponseEntity.ok(new ApiResponse<>(true, "Reservas del usuario con id: " + userId, reservationService.getReservationsByUserId(userId)));
     }
 
-    @GetMapping("/laboratory/{laboratoryId}")
+    @GetMapping("/user/laboratory/{laboratoryId}")
     public ResponseEntity<ApiResponse<List<Reservation>>> getReservationsByLaboratoryId(@PathVariable("laboratoryId") String laboratoryId) {
         return ResponseEntity.ok(new ApiResponse<>(true, "Reservas del laboratorio con id: " + laboratoryId, reservationService.getReservationsByLaboratoryId(laboratoryId)));
     }
 
-    @GetMapping("status/{status}")
+    @GetMapping("/user/reservations/status/{status}")
     public ResponseEntity<ApiResponse<List<Reservation>>> getReservationsByStatus(@PathVariable("status") ReservationStatus status) {
         return ResponseEntity.ok(new ApiResponse<>(true, "Reservas por estado: " + status, reservationService.getReservationsByStatus(status)));
     }
 
-    @GetMapping("user/{userId}/status/{status}")
+    @GetMapping("/user/reservations/{userId}/status/{status}")
     public ResponseEntity<ApiResponse<List<Reservation>>> getReservationsByUserIdAndStatus(@PathVariable("userId") String userId, @PathVariable("status") ReservationStatus status) {
         return ResponseEntity.ok(new ApiResponse<>(true, "Reservas del usuario con id: " + userId + " y estado: " + status, reservationService.getReservationsByUserIdAndStatus(userId, status)));
     }
 
-    @GetMapping("date/{date}")
+    @GetMapping("/user/reservations/date/{date}")
     public ResponseEntity<ApiResponse<List<Reservation>>> getReservationsByDate(@PathVariable("date") LocalDate date) {
         return ResponseEntity.ok(new ApiResponse<>(true, "Reservas por fecha: " + date.toString(), reservationService.getReservationsByDate(date)));
     }
 
-    @GetMapping("startsTime/{startTime}")
+    @GetMapping("/user/reservations/startsTime/{startTime}")
     public ResponseEntity<ApiResponse<List<Reservation>>> getReservationsByStartTime(@PathVariable("startTime") LocalTime startTime) {
         return ResponseEntity.ok(new ApiResponse<>(true, "Reservas que inician a las: " + startTime.toString(), reservationService.getReservationsByStartTime(startTime)));
     }
 
-    @GetMapping("duration/{duration}")
+    @GetMapping("/user/reservations/duration/{duration}")
     public ResponseEntity<ApiResponse<List<Reservation>>> getReservationsByDuration(@PathVariable("duration") int duration) {
         return ResponseEntity.ok(new ApiResponse<>(true, "Reservas por duración: " + duration + "MIN", reservationService.getReservationsByDuration(duration)));
     }
 
-    @PostMapping
+    @PostMapping("/user/reservations")
     public ResponseEntity<ApiResponse<Reservation>> createReservation(@RequestBody ReservationDTO reservationDTO) throws EciReservesException {
         return ResponseEntity.ok(new ApiResponse<>(true, "Reserva creada", reservationService.createReservation(reservationDTO)));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/user/reservations/{id}")
     public ResponseEntity<ApiResponse<Reservation>> updateReservation(@PathVariable("id") String id, @RequestBody ReservationDTO reservationDTO) throws EciReservesException {
         return ResponseEntity.ok(new ApiResponse<>(true, "Reserva actualizada", reservationService.updateReservation(id, reservationDTO)));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/admin/reservations/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteReservation(@PathVariable("id") String id) throws EciReservesException {
         reservationService.deleteReservation(id);
         return ResponseEntity.ok(new ApiResponse<>(true, "Reserva eliminada", null));

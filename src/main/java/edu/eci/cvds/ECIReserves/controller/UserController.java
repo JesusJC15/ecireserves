@@ -23,7 +23,7 @@ import edu.eci.cvds.ecireserves.model.User;
 import edu.eci.cvds.ecireserves.service.UserService;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/admin")
 public class UserController {
 
     private final UserService userService;
@@ -33,21 +33,21 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping
+    @GetMapping("/users")
     public ResponseEntity<ApiResponse<List<User>>> getAllUsers() {
         return ResponseEntity.ok(new ApiResponse<>(true, "Usuarios obtenidos exitosamente", userService.getAllUsers()));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/users/{id}")
     public ResponseEntity<ApiResponse<User>> getUserById(@PathVariable("id") String id) throws EciReservesException {
         return ResponseEntity.ok(new ApiResponse<>(true, "Usuario con id: " + id, userService.getUserById(id)));
     }
 
-    @GetMapping("/search")
+    @GetMapping("/users/search")
     public ResponseEntity<ApiResponse<List<User>>> getUsersByName(@RequestParam String name) {
         return ResponseEntity.ok(new ApiResponse<>(true, "Usuarios con nombre: " + name , userService.getUsersByName(name)));
     }
-    @GetMapping("/email")
+    @GetMapping("/users/email")
     public ResponseEntity<ApiResponse<Optional<User>>> getUserByEmail(@RequestParam String email) {
         Optional<User> user = userService.getUserByEmail(email);
         if (user.isEmpty()) {
@@ -56,17 +56,17 @@ public class UserController {
         }
         return ResponseEntity.ok(new ApiResponse<>(true, "Usuario encontrado", user));
     }
-    @PostMapping
+    @PostMapping("/users")
     public ResponseEntity<ApiResponse<User>> createUser(@RequestBody UserDTO userDTO) throws EciReservesException {
         return ResponseEntity.ok(new ApiResponse<>(true, "Usuario creado", userService.createUser(userDTO)));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/users/{id}")
     public ResponseEntity<ApiResponse<User>> updateUser(@PathVariable("id") String id, @RequestBody UserDTO userDTO) throws EciReservesException {
         return ResponseEntity.ok(new ApiResponse<>(true, "Usuario actualizado", userService.updateUser(id, userDTO)));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/users/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable("id") String id) throws EciReservesException {
         userService.deleteUser(id);
         return ResponseEntity.ok(new ApiResponse<>(true, "Usuario eliminado", null));

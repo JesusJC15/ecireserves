@@ -16,7 +16,7 @@ import edu.eci.cvds.ecireserves.service.LaboratoryService;
 
 
 @RestController
-@RequestMapping("/api/laboratories")
+@RequestMapping("/api")
 public class LaboratoryController {
     private final LaboratoryService laboratoryService;
 
@@ -25,52 +25,52 @@ public class LaboratoryController {
         this.laboratoryService = laboratoryService;
     }
 
-    @GetMapping
+    @GetMapping("/user/laboratories")
     public ResponseEntity<ApiResponse<List<Laboratory>>> getAllLaboratories() {
         return ResponseEntity.ok(new ApiResponse<>(true, "Laboratorios obtenidos exitosamente", laboratoryService.getAllLaboratories()));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/user/laboratories/{id}")
     public ResponseEntity<ApiResponse<Laboratory>> getLaboratoryById(@PathVariable("id") String id) throws EciReservesException {
         return ResponseEntity.ok(new ApiResponse<>(true, "Laboratorio con id " + id +  " encontrado", laboratoryService.getLaboratoryById(id)));
     }
 
-    @GetMapping("/classroom/{classroom}")
+    @GetMapping("/user/laboratories/classroom/{classroom}")
     public ResponseEntity<ApiResponse<List<Laboratory>>> getLaboratoriesByClassroom(@PathVariable("classroom") String classroom) {
         return ResponseEntity.ok(new ApiResponse<>(true, "Laboratorios del salon " + classroom, laboratoryService.getLaboratoriesByClassroom(classroom)));
     }
     
-    @GetMapping("/search")
+    @GetMapping("/user/laboratories/search")
     public ResponseEntity<ApiResponse<List<Laboratory>>> getLaboratoriesByName(@RequestParam String name) {
         return ResponseEntity.ok(new ApiResponse<>(true, "Laboratorios por nombre " + name, laboratoryService.getLaboratoriesByName(name)));
     }
 
-    @GetMapping("/capacity/{capacity}")
+    @GetMapping("/user/laboratories/capacity/{capacity}")
     public ResponseEntity<ApiResponse<List<Laboratory>>> getLaboratoriesByCapacity(@PathVariable("capacity") int capacity) {
         return ResponseEntity.ok(new ApiResponse<>(true, "Laboratorios de capacidad " + capacity, laboratoryService.getLaboratoriesByCapacity(capacity)));
     }
 
-    @GetMapping("/day/{day}")
+    @GetMapping("/user/laboratories/day/{day}")
     public ResponseEntity<ApiResponse<List<Laboratory>>> getLaboratoriesByDay(@PathVariable("day") DaysOfWeek day) {
         return ResponseEntity.ok(new ApiResponse<>(true, "Laboratorios del dia " + day, laboratoryService.getLaboratoriesByDay(day)));
     }
 
-    @GetMapping("/opening-time/{openingTime}")
+    @GetMapping("/user/laboratories/opening-time/{openingTime}")
     public ResponseEntity<ApiResponse<List<Laboratory>>> getLaboratoriesByOpeningTime(@PathVariable("openingTime") LocalTime openingTime) {
         return ResponseEntity.ok(new ApiResponse<>(true, "Laboratorios que abren a las: " + openingTime.toString(), laboratoryService.getLaboratoriesByOpeningTime(openingTime)));
     }
 
-    @PostMapping
+    @PostMapping("/admin/laboratories")
     public ResponseEntity<ApiResponse<Laboratory>> createLaboratory(@RequestBody LaboratoryDTO laboratoryDTO) throws EciReservesException {
         return ResponseEntity.ok(new ApiResponse<>(true, "Laboratorio creado", laboratoryService.createLaboratory(laboratoryDTO)));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/admin/laboratories/{id}")
     public ResponseEntity<ApiResponse<Laboratory>> updateLaboratory(@PathVariable("id") String id, @RequestBody LaboratoryDTO laboratoryDTO) throws EciReservesException {
         return ResponseEntity.ok(new ApiResponse<>(true, "Laboratorio actualizado", laboratoryService.updateLaboratory(id, laboratoryDTO)));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/admin/laboratories/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteLaboratory(@PathVariable("id") String id) throws EciReservesException {
         laboratoryService.deleteLaboratory(id);
         return ResponseEntity.ok(new ApiResponse<>(true, "Laboratorio eliminado", null));
