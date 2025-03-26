@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.eci.cvds.ecireserves.dto.ReservationDTO;
@@ -20,7 +19,6 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final LaboratoryRepository laboratoryRepository;
 
-    @Autowired
     public ReservationService(ReservationRepository reservationRepository, LaboratoryRepository laboratoryRepository) {
         this.reservationRepository = reservationRepository;
         this.laboratoryRepository = laboratoryRepository;

@@ -11,7 +11,7 @@
 	</parent>
 
 	<groupId>edu.eci.cvds</groupId>
-	<artifactId>ECIReserves</artifactId>
+	<artifactId>ecireserves</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ecireserves</name>
 	<description>Laboratory reservation system for the Deanship of Systems Engineering</description>
@@ -71,7 +71,6 @@
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-runtime</artifactId>
-            <version>2.3.1</version>
         </dependency>
         <dependency>
             <groupId>javax.activation</groupId>

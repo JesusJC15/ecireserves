@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,9 +25,9 @@ import edu.eci.cvds.ecireserves.service.ReservationService;
 @RestController
 @RequestMapping("/api")
 public class ReservationController {
+
     private final ReservationService reservationService;
 
-    @Autowired
     public ReservationController(ReservationService reservationService) {
         this.reservationService = reservationService;
     }
@@ -40,51 +39,61 @@ public class ReservationController {
     }
 
     @GetMapping("/user/reservations/{userId}")
+    @PreAuthorize("hasAnyRole('USUARIO', 'ADMINISTRADOR', 'PROFESOR')")
     public ResponseEntity<ApiResponse<List<Reservation>>> getReservationsByUserId(@PathVariable("userId") String userId) {
         return ResponseEntity.ok(new ApiResponse<>(true, "Reservas del usuario con id: " + userId, reservationService.getReservationsByUserId(userId)));
     }
 
     @GetMapping("/user/laboratory/{laboratoryId}")
+    @PreAuthorize("hasAnyRole('USUARIO', 'ADMINISTRADOR', 'PROFESOR')")
     public ResponseEntity<ApiResponse<List<Reservation>>> getReservationsByLaboratoryId(@PathVariable("laboratoryId") String laboratoryId) {
         return ResponseEntity.ok(new ApiResponse<>(true, "Reservas del laboratorio con id: " + laboratoryId, reservationService.getReservationsByLaboratoryId(laboratoryId)));
     }
 
     @GetMapping("/user/reservations/status/{status}")
+    @PreAuthorize("hasAnyRole('USUARIO', 'ADMINISTRADOR', 'PROFESOR')")
     public ResponseEntity<ApiResponse<List<Reservation>>> getReservationsByStatus(@PathVariable("status") ReservationStatus status) {
         return ResponseEntity.ok(new ApiResponse<>(true, "Reservas por estado: " + status, reservationService.getReservationsByStatus(status)));
     }
 
     @GetMapping("/user/reservations/{userId}/status/{status}")
+    @PreAuthorize("hasAnyRole('USUARIO', 'ADMINISTRADOR', 'PROFESOR')")
     public ResponseEntity<ApiResponse<List<Reservation>>> getReservationsByUserIdAndStatus(@PathVariable("userId") String userId, @PathVariable("status") ReservationStatus status) {
         return ResponseEntity.ok(new ApiResponse<>(true, "Reservas del usuario con id: " + userId + " y estado: " + status, reservationService.getReservationsByUserIdAndStatus(userId, status)));
     }
 
     @GetMapping("/user/reservations/date/{date}")
+    @PreAuthorize("hasAnyRole('USUARIO', 'ADMINISTRADOR', 'PROFESOR')")
     public ResponseEntity<ApiResponse<List<Reservation>>> getReservationsByDate(@PathVariable("date") LocalDate date) {
         return ResponseEntity.ok(new ApiResponse<>(true, "Reservas por fecha: " + date.toString(), reservationService.getReservationsByDate(date)));
     }
 
     @GetMapping("/user/reservations/startsTime/{startTime}")
+    @PreAuthorize("hasAnyRole('USUARIO', 'ADMINISTRADOR', 'PROFESOR')")
     public ResponseEntity<ApiResponse<List<Reservation>>> getReservationsByStartTime(@PathVariable("startTime") LocalTime startTime) {
         return ResponseEntity.ok(new ApiResponse<>(true, "Reservas que inician a las: " + startTime.toString(), reservationService.getReservationsByStartTime(startTime)));
     }
 
     @GetMapping("/user/reservations/duration/{duration}")
+    @PreAuthorize("hasAnyRole('USUARIO', 'ADMINISTRADOR', 'PROFESOR')")
     public ResponseEntity<ApiResponse<List<Reservation>>> getReservationsByDuration(@PathVariable("duration") int duration) {
         return ResponseEntity.ok(new ApiResponse<>(true, "Reservas por duración: " + duration + "MIN", reservationService.getReservationsByDuration(duration)));
     }
 
     @PostMapping("/user/reservations")
+    @PreAuthorize("hasAnyRole('USUARIO', 'ADMINISTRADOR', 'PROFESOR')")
     public ResponseEntity<ApiResponse<Reservation>> createReservation(@RequestBody ReservationDTO reservationDTO) throws EciReservesException {
         return ResponseEntity.ok(new ApiResponse<>(true, "Reserva creada", reservationService.createReservation(reservationDTO)));
     }
 
     @PutMapping("/user/reservations/{id}")
+    @PreAuthorize("hasAnyRole('USUARIO', 'ADMINISTRADOR', 'PROFESOR')")
     public ResponseEntity<ApiResponse<Reservation>> updateReservation(@PathVariable("id") String id, @RequestBody ReservationDTO reservationDTO) throws EciReservesException {
         return ResponseEntity.ok(new ApiResponse<>(true, "Reserva actualizada", reservationService.updateReservation(id, reservationDTO)));
     }
 
     @DeleteMapping("/admin/reservations/{id}")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<ApiResponse<Void>> deleteReservation(@PathVariable("id") String id) throws EciReservesException {
         reservationService.deleteReservation(id);
         return ResponseEntity.ok(new ApiResponse<>(true, "Reserva eliminada", null));

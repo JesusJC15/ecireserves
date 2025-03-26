@@ -3,7 +3,6 @@ package edu.eci.cvds.ecireserves.service;
 import java.time.LocalTime;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.eci.cvds.ecireserves.dto.LaboratoryDTO;
@@ -16,7 +15,6 @@ import edu.eci.cvds.ecireserves.repository.LaboratoryRepository;
 public class LaboratoryService {
     private final LaboratoryRepository laboratoryRepository;
 
-    @Autowired
     public LaboratoryService(LaboratoryRepository laboratoryRepository) {
         this.laboratoryRepository = laboratoryRepository;
     }

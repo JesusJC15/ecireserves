@@ -3,9 +3,9 @@ package edu.eci.cvds.ecireserves.controller;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,26 +28,29 @@ public class UserController {
 
     private final UserService userService;
 
-    @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
     @GetMapping("/users")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<ApiResponse<List<User>>> getAllUsers() {
         return ResponseEntity.ok(new ApiResponse<>(true, "Usuarios obtenidos exitosamente", userService.getAllUsers()));
     }
 
     @GetMapping("/users/{id}")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<ApiResponse<User>> getUserById(@PathVariable("id") String id) throws EciReservesException {
         return ResponseEntity.ok(new ApiResponse<>(true, "Usuario con id: " + id, userService.getUserById(id)));
     }
 
     @GetMapping("/users/search")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<ApiResponse<List<User>>> getUsersByName(@RequestParam String name) {
         return ResponseEntity.ok(new ApiResponse<>(true, "Usuarios con nombre: " + name , userService.getUsersByName(name)));
     }
     @GetMapping("/users/email")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<ApiResponse<Optional<User>>> getUserByEmail(@RequestParam String email) {
         Optional<User> user = userService.getUserByEmail(email);
         if (user.isEmpty()) {
@@ -57,16 +60,19 @@ public class UserController {
         return ResponseEntity.ok(new ApiResponse<>(true, "Usuario encontrado", user));
     }
     @PostMapping("/users")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<ApiResponse<User>> createUser(@RequestBody UserDTO userDTO) throws EciReservesException {
         return ResponseEntity.ok(new ApiResponse<>(true, "Usuario creado", userService.createUser(userDTO)));
     }
 
     @PutMapping("/users/{id}")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<ApiResponse<User>> updateUser(@PathVariable("id") String id, @RequestBody UserDTO userDTO) throws EciReservesException {
         return ResponseEntity.ok(new ApiResponse<>(true, "Usuario actualizado", userService.updateUser(id, userDTO)));
     }
 
     @DeleteMapping("/users/{id}")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable("id") String id) throws EciReservesException {
         userService.deleteUser(id);
         return ResponseEntity.ok(new ApiResponse<>(true, "Usuario eliminado", null));
