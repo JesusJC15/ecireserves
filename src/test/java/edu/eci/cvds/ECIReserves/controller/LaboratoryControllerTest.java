@@ -1,5 +1,6 @@
 package edu.eci.cvds.ecireserves.controller;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -245,4 +246,49 @@ class LaboratoryControllerTest {
 
         verify(laboratoryService, times(1)).createLaboratory(laboratoryDTO);
     }
+
+    @Test
+    void getLaboratoriesByDate_ShouldReturnLaboratories_WhenExists() {
+        LocalDate date = LocalDate.of(2025, 3, 29);
+
+        when(laboratoryService.getLaboratoriesByDate(date)).thenReturn(sampleLabs);
+
+        ResponseEntity<ApiResponse<List<Laboratory>>> response = laboratoryController.getLaboratoriesByDate(date);
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertTrue(response.getBody().isSuccess());
+        assertEquals(2, response.getBody().getData().size());
+        verify(laboratoryService, times(1)).getLaboratoriesByDate(date);
+    }
+
+    @Test
+    void getLaboratoriesByDate_ShouldReturnEmptyList_WhenNoLaboratoriesFound() {
+        LocalDate date = LocalDate.of(2025, 3, 30);
+
+        when(laboratoryService.getLaboratoriesByDate(date)).thenReturn(Collections.emptyList());
+
+        ResponseEntity<ApiResponse<List<Laboratory>>> response = laboratoryController.getLaboratoriesByDate(date);
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertTrue(response.getBody().isSuccess());
+        assertTrue(response.getBody().getData().isEmpty());
+        verify(laboratoryService, times(1)).getLaboratoriesByDate(date);
+    }
+
+    @Test
+    void getLaboratoriesByStatus_ShouldReturnLaboratories_WhenExists() {
+        when(laboratoryService.getLaboratoriesByStatus(LaboratoryStatus.ACTIVO)).thenReturn(List.of(sampleLabs.get(0)));
+
+        ResponseEntity<ApiResponse<List<Laboratory>>> response = laboratoryController.getLaboratoriesByStatus(LaboratoryStatus.ACTIVO);
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertTrue(response.getBody().isSuccess());
+        assertEquals(1, response.getBody().getData().size());
+        assertEquals(LaboratoryStatus.ACTIVO, response.getBody().getData().get(0).getStatus());
+        verify(laboratoryService, times(1)).getLaboratoriesByStatus(LaboratoryStatus.ACTIVO);
+    }
+
 }

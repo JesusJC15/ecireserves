@@ -1,5 +1,6 @@
 package edu.eci.cvds.ecireserves.service;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
@@ -176,4 +177,30 @@ class LaboratoryServiceTest {
         assertFalse(labs.isEmpty());
         assertEquals(LocalTime.of(8, 0), labs.get(0).getOpeningTime());
     }
+
+    @Test
+    void shouldGetLaboratoriesByDate() {
+        LocalDate date = LocalDate.of(2025, 3, 29);
+        laboratory.setTimeSlotsByDate(Map.of(date, List.of())); // Simulamos que el laboratorio tiene horarios en esa fecha
+        
+        when(laboratoryRepository.findAll()).thenReturn(List.of(laboratory));
+
+        List<Laboratory> labs = laboratoryService.getLaboratoriesByDate(date);
+
+        assertFalse(labs.isEmpty());
+        assertEquals(1, labs.size());
+        assertEquals("1", labs.get(0).getId());
+    }
+
+    @Test
+    void shouldGetLaboratoriesByStatus() {
+        when(laboratoryRepository.findByStatus(LaboratoryStatus.ACTIVO)).thenReturn(List.of(laboratory));
+
+        List<Laboratory> labs = laboratoryService.getLaboratoriesByStatus(LaboratoryStatus.ACTIVO);
+
+        assertFalse(labs.isEmpty());
+        assertEquals(1, labs.size());
+        assertEquals(LaboratoryStatus.ACTIVO, labs.get(0).getStatus());
+    }
+
 }

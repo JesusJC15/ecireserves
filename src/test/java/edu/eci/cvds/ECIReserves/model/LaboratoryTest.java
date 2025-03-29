@@ -161,4 +161,22 @@ class LaboratoryTest {
 
         assertEquals(1, laboratory.getTimeSlotsByDate().get(LocalDate.now()).size());
     }
+
+    @Test
+    void shouldThrowExceptionWhenAddingAdjacentTimeSlot() throws EciReservesException {
+        laboratory.addTimeSlot(LocalDate.now(), LocalTime.of(10, 0), LocalTime.of(11, 0));
+        EciReservesException exception = assertThrows(EciReservesException.class, () -> 
+            laboratory.addTimeSlot(LocalDate.now(), LocalTime.of(10, 30), LocalTime.of(11, 30))
+        );
+        assertEquals(EciReservesException.TIMESLOT_OVERLAPS, exception.getMessage());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenRemovingNonExistentDate() {
+        LocalDate date = LocalDate.now().plusDays(1);
+        EciReservesException exception = assertThrows(EciReservesException.class, () -> 
+            laboratory.removeTimeSlot(date, LocalTime.of(10, 0), LocalTime.of(12, 0))
+        );
+        assertEquals(EciReservesException.TIMESLOT_NOT_FOUND, exception.getMessage());
+    }
 }
