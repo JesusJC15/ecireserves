@@ -72,6 +72,7 @@ public class UserController {
         }
         return ResponseEntity.ok(new ApiResponse<>(true, "Usuario encontrado", user));
     }
+    
     @PostMapping("/users")
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @Operation(summary = "Crear nuevo usuario", description = "Crea un nuevo usuario en el sistema.")

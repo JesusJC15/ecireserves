@@ -27,8 +27,6 @@ jobs:
 
       - name: Set environment variables
         run: echo "MONGODB_PASSWORD=${{ secrets.MONGODB_PASSWORD }}" >> $GITHUB_ENV
-        env:
-          MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
 
       - name: Build with Maven
         run: mvn clean install
