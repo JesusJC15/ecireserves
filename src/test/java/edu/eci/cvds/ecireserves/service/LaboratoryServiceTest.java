@@ -1,7 +1,9 @@
 package edu.eci.cvds.ecireserves.service;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -19,7 +21,7 @@ import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import edu.eci.cvds.ecireserves.dto.LaboratoryDTO;
-import edu.eci.cvds.ecireserves.enums.DaysOfWeek;
+import edu.eci.cvds.ecireserves.enums.LaboratoryStatus;
 import edu.eci.cvds.ecireserves.exception.EciReservesException;
 import edu.eci.cvds.ecireserves.model.Laboratory;
 import edu.eci.cvds.ecireserves.repository.LaboratoryRepository;
@@ -38,9 +40,8 @@ class LaboratoryServiceTest {
 
     @BeforeEach
     void setUp() {
-        laboratory = new Laboratory("1", "A101", "Computer Lab", 30, "Lab for programming", 
-                                    DaysOfWeek.LUNES, LocalTime.of(8, 0), LocalTime.of(18, 0), List.of(), List.of());
-        laboratoryDTO = new LaboratoryDTO("1", "A101", "Computer Lab", 30, "Lab for programming", DaysOfWeek.LUNES, LocalTime.of(8, 0), LocalTime.of(18, 0));
+        laboratory = new Laboratory("1", "A101", "Computer Lab", 30, "Lab for programming", LocalTime.of(8, 0), LocalTime.of(18, 0), LaboratoryStatus.ACTIVO, null, Map.of());
+        laboratoryDTO = new LaboratoryDTO("1", "A101", "Computer Lab", 30, "Lab for programming", LocalTime.of(8, 0), LocalTime.of(18, 0), LaboratoryStatus.ACTIVO);
     }
 
     @Test
@@ -109,8 +110,7 @@ class LaboratoryServiceTest {
         when(laboratoryRepository.findById("1")).thenReturn(Optional.of(laboratory));
         when(laboratoryRepository.save(any(Laboratory.class))).thenReturn(laboratory);
 
-        LaboratoryDTO updatedDTO = new LaboratoryDTO("1", "B202", "Updated Lab", 40, "New description",
-                                                     DaysOfWeek.MARTES, LocalTime.of(9, 0), LocalTime.of(19, 0));
+        LaboratoryDTO updatedDTO = new LaboratoryDTO("1", "B202", "Updated Lab", 40, "New description", LocalTime.of(9, 0), LocalTime.of(19, 0), LaboratoryStatus.ACTIVO);
         
         Laboratory updatedLab = laboratoryService.updateLaboratory("1", updatedDTO);
 
@@ -169,16 +169,6 @@ class LaboratoryServiceTest {
     }
 
     @Test
-    void shouldGetLaboratoryByDay() {
-        when(laboratoryRepository.findByDay(DaysOfWeek.LUNES)).thenReturn(List.of(laboratory));
-
-        List<Laboratory> labs = laboratoryService.getLaboratoriesByDay(DaysOfWeek.LUNES);
-
-        assertFalse(labs.isEmpty());
-        assertEquals(DaysOfWeek.LUNES, labs.get(0).getDay());
-    }
-
-    @Test
     void shouldGetLaboratoryByOpeningTime() {
         when(laboratoryRepository.findByOpeningTime(LocalTime.of(8, 0))).thenReturn(List.of(laboratory));
 
@@ -187,4 +177,30 @@ class LaboratoryServiceTest {
         assertFalse(labs.isEmpty());
         assertEquals(LocalTime.of(8, 0), labs.get(0).getOpeningTime());
     }
+
+    @Test
+    void shouldGetLaboratoriesByDate() {
+        LocalDate date = LocalDate.of(2025, 3, 29);
+        laboratory.setTimeSlotsByDate(Map.of(date, List.of())); // Simulamos que el laboratorio tiene horarios en esa fecha
+        
+        when(laboratoryRepository.findAll()).thenReturn(List.of(laboratory));
+
+        List<Laboratory> labs = laboratoryService.getLaboratoriesByDate(date);
+
+        assertFalse(labs.isEmpty());
+        assertEquals(1, labs.size());
+        assertEquals("1", labs.get(0).getId());
+    }
+
+    @Test
+    void shouldGetLaboratoriesByStatus() {
+        when(laboratoryRepository.findByStatus(LaboratoryStatus.ACTIVO)).thenReturn(List.of(laboratory));
+
+        List<Laboratory> labs = laboratoryService.getLaboratoriesByStatus(LaboratoryStatus.ACTIVO);
+
+        assertFalse(labs.isEmpty());
+        assertEquals(1, labs.size());
+        assertEquals(LaboratoryStatus.ACTIVO, labs.get(0).getStatus());
+    }
+
 }

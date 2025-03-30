@@ -1,13 +1,16 @@
 package edu.eci.cvds.ecireserves.model;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import edu.eci.cvds.ecireserves.enums.DaysOfWeek;
+import edu.eci.cvds.ecireserves.enums.LaboratoryStatus;
 import edu.eci.cvds.ecireserves.exception.EciReservesException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,11 +30,11 @@ public class Laboratory {
     private String name;
     private int capacity;
     private String description;
-    private DaysOfWeek day;
     private LocalTime openingTime;
     private LocalTime closingTime;
+    private LaboratoryStatus status;
     private List<TimeSlot> timeSlots = new ArrayList<>();
-    private List<Boolean> availables = new ArrayList<>();
+    private Map<LocalDate, List<TimeSlot>> timeSlotsByDate = new HashMap<>();
 
     /**
      * Add a  valid time slot to the laboratory and set it as unavailable
@@ -39,19 +42,19 @@ public class Laboratory {
      * @param endTime
      * @throws EciReservesException 
     */
-    public void addTimeSlot(LocalTime startTime, LocalTime endTime) throws EciReservesException {
+    public void addTimeSlot(LocalDate date, LocalTime startTime, LocalTime endTime) throws EciReservesException {
         if (startTime.isBefore(openingTime) || endTime.isAfter(closingTime) || !startTime.isBefore(endTime)) {
             throw new EciReservesException(EciReservesException.INVALID_TIMESLOT);
         }
 
-        for (TimeSlot slot : timeSlots) {
+        List<TimeSlot> slotsForDate = timeSlotsByDate.computeIfAbsent(date, k -> new ArrayList<>());
+        for (TimeSlot slot : slotsForDate) {
             if (startTime.isBefore(slot.getEndTime()) && endTime.isAfter(slot.getStartTime())) {
                 throw new EciReservesException(EciReservesException.TIMESLOT_OVERLAPS);
             }
         }
 
-        timeSlots.add(new TimeSlot(startTime, endTime));
-        availables.add(false);
+        slotsForDate.add(new TimeSlot(startTime, endTime));
     }
 
     /**
@@ -62,30 +65,33 @@ public class Laboratory {
      * @param newEndTime
      * @throws EciReservesException
      */
-    public void removeTimeSlot(LocalTime startTime, LocalTime endTime, LocalTime newStartTime, LocalTime newEndTime) throws EciReservesException {
+    public void removeTimeSlot(LocalDate date, LocalTime startTime, LocalTime endTime, LocalTime newStartTime, LocalTime newEndTime) throws EciReservesException {
+        List<TimeSlot> slotsForDate = timeSlotsByDate.get(date);
+        if (slotsForDate == null) {
+            throw new EciReservesException(EciReservesException.TIMESLOT_NOT_FOUND);
+        }
+
         TimeSlot removedSlot = null;
         int removedIndex = -1;
     
-        for (int i = 0; i < timeSlots.size(); i++) {
-            TimeSlot slot = timeSlots.get(i);
-            if (slot.getStartTime().equals(startTime) && slot.getEndTime().equals(endTime)) {
-                removedSlot = slot;
-                removedIndex = i;
-                timeSlots.remove(i);
-                availables.remove(i);
-                break;
-            }
+        for (int i = 0; i < slotsForDate.size(); i++) {
+        TimeSlot slot = slotsForDate.get(i);
+        if (slot.getStartTime().equals(startTime) && slot.getEndTime().equals(endTime)) {
+            removedSlot = slot;
+            removedIndex = i;
+            slotsForDate.remove(i);
+            break;
         }
+    }
     
         if (removedSlot == null) {
             throw new EciReservesException(EciReservesException.TIMESLOT_NOT_FOUND);
         }
     
         try {
-            addTimeSlot(newStartTime, newEndTime);
+            addTimeSlot(date, newStartTime, newEndTime);
         } catch (EciReservesException e) {
-            timeSlots.add(removedIndex, removedSlot);
-            availables.add(removedIndex, false);
+            slotsForDate.add(removedIndex, removedSlot);
             throw e;
         }
     }
@@ -96,16 +102,26 @@ public class Laboratory {
      * @param endTime
      * @throws EciReservesException
      */
-    public void removeTimeSlot(LocalTime startTime, LocalTime endTime) throws EciReservesException {
-        for (int i = 0; i < timeSlots.size(); i++) {
-            TimeSlot slot = timeSlots.get(i);
+    public void removeTimeSlot(LocalDate date, LocalTime startTime, LocalTime endTime) throws EciReservesException {
+        List<TimeSlot> slotsForDate = timeSlotsByDate.get(date);
+        
+        if (slotsForDate == null) {
+            throw new EciReservesException(EciReservesException.TIMESLOT_NOT_FOUND);
+        }
+    
+        for (int i = 0; i < slotsForDate.size(); i++) {
+            TimeSlot slot = slotsForDate.get(i);
             if (slot.getStartTime().equals(startTime) && slot.getEndTime().equals(endTime)) {
-                timeSlots.remove(i);
-                availables.remove(i);
+                slotsForDate.remove(i);
+                if (slotsForDate.isEmpty()) {
+                    timeSlotsByDate.remove(date);
+                }
                 return;
             }
         }
+    
         throw new EciReservesException(EciReservesException.TIMESLOT_NOT_FOUND);
     }
+    
     
 }

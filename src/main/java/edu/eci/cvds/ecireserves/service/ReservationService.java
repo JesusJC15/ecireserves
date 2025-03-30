@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.eci.cvds.ecireserves.dto.ReservationDTO;
@@ -20,7 +19,6 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final LaboratoryRepository laboratoryRepository;
 
-    @Autowired
     public ReservationService(ReservationRepository reservationRepository, LaboratoryRepository laboratoryRepository) {
         this.reservationRepository = reservationRepository;
         this.laboratoryRepository = laboratoryRepository;
@@ -116,13 +114,14 @@ public class ReservationService {
      */
     public Reservation createReservation(ReservationDTO reservationDTO) throws EciReservesException{
         Laboratory laboratory = laboratoryRepository.findById(reservationDTO.getLaboratoryId()).orElseThrow(() -> new EciReservesException(EciReservesException.LABORATORY_NOT_FOUND));
-        laboratory.addTimeSlot(reservationDTO.getStartTime(), reservationDTO.getStartTime().plusMinutes(reservationDTO.getDuration()));
+        laboratory.addTimeSlot(reservationDTO.getDate(), reservationDTO.getStartTime(), reservationDTO.getStartTime().plusMinutes(reservationDTO.getDuration()));
         laboratoryRepository.save(laboratory);
         Reservation reservation = new Reservation();
         reservation.setUserId(reservationDTO.getUserId());
         reservation.setLaboratoryId(reservationDTO.getLaboratoryId());
         reservation.setDate(reservationDTO.getDate());
         reservation.setStartTime(reservationDTO.getStartTime());
+        reservation.setEndTime(reservationDTO.getStartTime().plusMinutes(reservationDTO.getDuration()));
         reservation.setDuration(reservationDTO.getDuration());
         reservation.setPurpose(reservationDTO.getPurpose());
         reservation.setStatus(ReservationStatus.AGENDADA);
@@ -140,10 +139,11 @@ public class ReservationService {
         Reservation reservation = reservationRepository.findById(id).orElseThrow(() -> new EciReservesException(EciReservesException.RESERVATION_NOT_FOUND));
         Laboratory laboratory = laboratoryRepository.findById(reservationDTO.getLaboratoryId()).orElseThrow(() -> new EciReservesException(EciReservesException.LABORATORY_NOT_FOUND));
         reservation.setStatus(ReservationStatus.PENDIENTE);
-        if(reservationDTO.getNewStartLocalTime() != null && reservationDTO.getNewDuration() != null){
-            laboratory.removeTimeSlot(reservation.getStartTime(), reservation.getStartTime().plusMinutes(reservation.getDuration()), reservationDTO.getNewStartLocalTime(), reservationDTO.getNewStartLocalTime().plusMinutes(reservationDTO.getNewDuration()));
-            reservation.setStartTime(reservationDTO.getNewStartLocalTime());
+        if(reservationDTO.getNewStartTime() != null && reservationDTO.getNewDuration() != null){
+            laboratory.removeTimeSlot(reservationDTO.getDate(), reservation.getStartTime(), reservation.getStartTime().plusMinutes(reservation.getDuration()), reservationDTO.getNewStartTime(), reservationDTO.getNewStartTime().plusMinutes(reservationDTO.getNewDuration()));
+            reservation.setStartTime(reservationDTO.getNewStartTime());
             reservation.setDuration(reservationDTO.getNewDuration());
+            reservation.setEndTime(reservationDTO.getNewStartTime().plusMinutes(reservationDTO.getNewDuration()));
             laboratoryRepository.save(laboratory);
         }
         if(reservationDTO.getLaboratoryId() != null) reservation.setLaboratoryId(reservationDTO.getLaboratoryId());
@@ -162,7 +162,7 @@ public class ReservationService {
         Reservation reservation = reservationRepository.findById(id).orElseThrow(() -> new EciReservesException(EciReservesException.RESERVATION_NOT_FOUND));
         reservation.setStatus(ReservationStatus.CANCELADA);
         Laboratory laboratory = laboratoryRepository.findById(reservation.getLaboratoryId()).orElseThrow(() -> new EciReservesException(EciReservesException.LABORATORY_NOT_FOUND));
-        laboratory.removeTimeSlot(reservation.getStartTime(), reservation.getStartTime().plusMinutes(reservation.getDuration()));
+        laboratory.removeTimeSlot(reservation.getDate(), reservation.getStartTime(), reservation.getStartTime().plusMinutes(reservation.getDuration()));
         laboratoryRepository.save(laboratory);
 
         reservationRepository.deleteById(id);

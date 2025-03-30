@@ -1,13 +1,14 @@
 package edu.eci.cvds.ecireserves.service;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.eci.cvds.ecireserves.dto.LaboratoryDTO;
-import edu.eci.cvds.ecireserves.enums.DaysOfWeek;
+import edu.eci.cvds.ecireserves.enums.LaboratoryStatus;
 import edu.eci.cvds.ecireserves.exception.EciReservesException;
 import edu.eci.cvds.ecireserves.model.Laboratory;
 import edu.eci.cvds.ecireserves.repository.LaboratoryRepository;
@@ -16,7 +17,6 @@ import edu.eci.cvds.ecireserves.repository.LaboratoryRepository;
 public class LaboratoryService {
     private final LaboratoryRepository laboratoryRepository;
 
-    @Autowired
     public LaboratoryService(LaboratoryRepository laboratoryRepository) {
         this.laboratoryRepository = laboratoryRepository;
     }
@@ -33,7 +33,7 @@ public class LaboratoryService {
      * Get laboratory by id
      * @param id Laboratory id
      * @return Laboratory
-     * @throws EciReservesException
+     * @throws ecireservesException
      */
     public Laboratory getLaboratoryById(String id) throws EciReservesException {
         return laboratoryRepository.findById(id).orElseThrow(() -> new EciReservesException(EciReservesException.LABORATORY_NOT_FOUND));
@@ -67,12 +67,19 @@ public class LaboratoryService {
     }
 
     /**
-     * Get laboratories by day
+     * Get laboratories that has a time slot on a specific day
      * @param day
      * @return List of laboratories
      */
-    public List<Laboratory> getLaboratoriesByDay(DaysOfWeek day) {
-        return laboratoryRepository.findByDay(day);
+    public List<Laboratory> getLaboratoriesByDate(LocalDate date) {
+        List<Laboratory> laboratories = laboratoryRepository.findAll();
+        List<Laboratory> labsOfDate = new ArrayList<>();
+        for (Laboratory laboratory : laboratories) {
+            if (laboratory.getTimeSlotsByDate().containsKey(date)) {
+                labsOfDate.add(laboratory);
+            }
+        }
+        return labsOfDate;
     }
 
     /**
@@ -82,6 +89,15 @@ public class LaboratoryService {
      */
     public List<Laboratory> getLaboratoriesByOpeningTime(LocalTime openingTime) {
         return laboratoryRepository.findByOpeningTime(openingTime);
+    }
+
+    /**
+     * Get laboratories by status
+     * @param status
+     * @return List of laboratories
+     */
+    public List<Laboratory> getLaboratoriesByStatus(LaboratoryStatus status) {
+        return laboratoryRepository.findByStatus(status);
     }
 
     /**
@@ -100,9 +116,9 @@ public class LaboratoryService {
             laboratory.setName(laboratoryDTO.getName());
             laboratory.setCapacity(laboratoryDTO.getCapacity());
             laboratory.setDescription(laboratoryDTO.getDescription());
-            laboratory.setDay(laboratoryDTO.getDay());
             laboratory.setOpeningTime(laboratoryDTO.getOpeningTime());
             laboratory.setClosingTime(laboratoryDTO.getClosingTime());
+            laboratory.setStatus(laboratoryDTO.getStatus());
             
             return laboratoryRepository.save(laboratory);
         }
@@ -121,9 +137,9 @@ public class LaboratoryService {
         if(laboratoryDTO.getName() != null) laboratory.setName(laboratoryDTO.getName());
         if(laboratoryDTO.getCapacity() != 0) laboratory.setCapacity(laboratoryDTO.getCapacity());
         if(laboratoryDTO.getDescription() != null) laboratory.setDescription(laboratoryDTO.getDescription());
-        if(laboratoryDTO.getDay() != null) laboratory.setDay(laboratoryDTO.getDay());
         if(laboratoryDTO.getOpeningTime() != null) laboratory.setOpeningTime(laboratoryDTO.getOpeningTime());
         if(laboratoryDTO.getClosingTime() != null) laboratory.setClosingTime(laboratoryDTO.getClosingTime());
+        if(laboratoryDTO.getStatus() != null) laboratory.setStatus(laboratoryDTO.getStatus());
 
         return laboratoryRepository.save(laboratory);
     }

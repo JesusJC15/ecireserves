@@ -178,7 +178,8 @@ class ReservationServiceTest {
     void shouldThrowExceptionWhenReservationNotFound() {
         when(reservationRepository.findById("invalidId")).thenReturn(Optional.empty());
 
-        assertThrows(EciReservesException.class, () -> reservationService.getReservationById("invalidId"));
+        EciReservesException exception = assertThrows(EciReservesException.class, () -> reservationService.getReservationById("invalidId"));
+        assertNotNull(exception);
     }
 
     @Test
@@ -197,7 +198,8 @@ class ReservationServiceTest {
     void shouldNotCreateReservationWhenLaboratoryNotFound() {
         when(laboratoryRepository.findById("lab1")).thenReturn(Optional.empty());
 
-        assertThrows(EciReservesException.class, () -> reservationService.createReservation(reservationDTO));
+        EciReservesException exception = assertThrows(EciReservesException.class, () -> reservationService.createReservation(reservationDTO));
+        assertNotNull(exception);
     }
 
     @Test
@@ -205,8 +207,8 @@ class ReservationServiceTest {
         when(reservationRepository.findById("res123")).thenReturn(Optional.of(reservation));
         when(laboratoryRepository.findById("lab1")).thenReturn(Optional.of(laboratory));
         when(reservationRepository.save(any(Reservation.class))).thenReturn(reservation);
-        laboratory.addTimeSlot(reservation.getStartTime(), reservation.getStartTime().plusMinutes(reservation.getDuration()));
-        reservationDTO.setNewStartLocalTime(LocalTime.of(11, 0));
+        laboratory.addTimeSlot(reservation.getDate(), reservation.getStartTime(), reservation.getStartTime().plusMinutes(reservation.getDuration()));
+        reservationDTO.setNewStartTime(LocalTime.of(11, 0));
         reservationDTO.setNewDuration(90);
         
         Reservation updated = reservationService.updateReservation("res123", reservationDTO);
@@ -221,14 +223,15 @@ class ReservationServiceTest {
     void shouldNotUpdateReservationWhenNotFound() {
         when(reservationRepository.findById("invalidId")).thenReturn(Optional.empty());
 
-        assertThrows(EciReservesException.class, () -> reservationService.updateReservation("invalidId", reservationDTO));
+        EciReservesException exception = assertThrows(EciReservesException.class, () -> reservationService.updateReservation("invalidId", reservationDTO));
+        assertNotNull(exception);
     }
 
     @Test
     void shouldDeleteReservation() throws EciReservesException {
         when(reservationRepository.findById("res123")).thenReturn(Optional.of(reservation));
         when(laboratoryRepository.findById("lab1")).thenReturn(Optional.of(laboratory));
-        laboratory.addTimeSlot(reservation.getStartTime(), reservation.getStartTime().plusMinutes(reservation.getDuration()));
+        laboratory.addTimeSlot(LocalDate.now(),reservation.getStartTime(), reservation.getStartTime().plusMinutes(reservation.getDuration()));
         reservationService.deleteReservation("res123");
 
         verify(reservationRepository, times(1)).deleteById("res123");
@@ -238,6 +241,7 @@ class ReservationServiceTest {
     void shouldNotDeleteReservationWhenNotFound() {
         when(reservationRepository.findById("invalidId")).thenReturn(Optional.empty());
 
-        assertThrows(EciReservesException.class, () -> reservationService.deleteReservation("invalidId"));
+        EciReservesException exception = assertThrows(EciReservesException.class, () -> reservationService.deleteReservation("invalidId"));
+        assertNotNull(exception);
     }
 }

@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +15,7 @@ import static org.mockito.ArgumentMatchers.any;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -33,12 +35,10 @@ class UserServiceTest {
     private UserService userService;
 
     private User user;
-    private UserDTO userDTO;
-
+    
     @BeforeEach
     void setUp() {
         user = new User("1", "John Doe", "johndoe@example.com", "password123", UserRole.ESTUDIANTE);
-        userDTO = new UserDTO("1", "John Doe", "johndoe@example.com", "password123", UserRole.ESTUDIANTE);
     }
 
     @Test
@@ -94,39 +94,6 @@ class UserServiceTest {
     }
 
     @Test
-    void shouldCreateUserWhenIdAndEmailAreUnique() throws EciReservesException {
-        when(userRepository.findById("1")).thenReturn(Optional.empty());
-        when(userRepository.findByEmail("johndoe@example.com")).thenReturn(Optional.empty());
-        when(userRepository.save(any(User.class))).thenReturn(user);
-
-        User createdUser = userService.createUser(userDTO);
-
-        assertNotNull(createdUser);
-        assertEquals(user.getEmail(), createdUser.getEmail());
-    }
-
-    @Test
-    void shouldThrowExceptionWhenUserIdAlreadyExists() {
-        when(userRepository.findById("1")).thenReturn(Optional.of(user));
-
-        EciReservesException exception = assertThrows(EciReservesException.class, () -> userService.createUser(userDTO));
-
-        assertEquals(EciReservesException.USER_ALREADY_EXISTS, exception.getMessage());
-    }
-
-    @Test
-    void shouldThrowExceptionWhenEmailAlreadyExists() {
-        when(userRepository.findById("2")).thenReturn(Optional.empty());
-        when(userRepository.findByEmail("johndoe@example.com")).thenReturn(Optional.of(user));
-
-        UserDTO newUserDTO = new UserDTO("2", "Jane Doe", "johndoe@example.com", "password456", UserRole.PROFESOR);
-
-        EciReservesException exception = assertThrows(EciReservesException.class, () -> userService.createUser(newUserDTO));
-
-        assertEquals(EciReservesException.USER_EMAIL_ALREADY_EXISTS, exception.getMessage());
-    }
-
-    @Test
     void shouldUpdateUserWhenDataIsValid() throws EciReservesException {
         when(userRepository.findById("1")).thenReturn(Optional.of(user));
         when(userRepository.findByEmail("newemail@example.com")).thenReturn(Optional.empty());
@@ -168,6 +135,49 @@ class UserServiceTest {
         EciReservesException exception = assertThrows(EciReservesException.class, () -> userService.deleteUser("1"));
 
         assertEquals(EciReservesException.USER_NOT_FOUND, exception.getMessage());
+    }
+
+    @Test
+    void shouldCreateUserWhenEmailDoesNotExist() throws EciReservesException {
+        UserDTO newUserDTO = new UserDTO("1", "John Doe", "johndoe@example.com", "password123", UserRole.ESTUDIANTE);
+        User newUser = new User("1", "John Doe", "johndoe@example.com", "password123", UserRole.ESTUDIANTE);
+
+        when(userRepository.findByEmail("johndoe@example.com")).thenReturn(Optional.empty());
+        when(userRepository.save(any(User.class))).thenReturn(newUser);
+
+        User createdUser = userService.createUser(newUserDTO);
+
+        assertNotNull(createdUser);
+        assertEquals("John Doe", createdUser.getName());
+        assertEquals("johndoe@example.com", createdUser.getEmail());
+        assertEquals(UserRole.ESTUDIANTE, createdUser.getRol());
+        
+        verify(userRepository).save(any(User.class));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenEmailAlreadyExists() {
+        UserDTO newUserDTO = new UserDTO("1", "John Doe", "johndoe@example.com", "password123", UserRole.ESTUDIANTE);
+        User existingUser = new User("1", "John Doe", "johndoe@example.com", "password123", UserRole.ESTUDIANTE);
+
+        when(userRepository.findByEmail("johndoe@example.com")).thenReturn(Optional.of(existingUser));
+
+        EciReservesException exception = assertThrows(EciReservesException.class, () -> userService.createUser(newUserDTO));
+
+        assertEquals(EciReservesException.USER_EMAIL_ALREADY_EXISTS, exception.getMessage());
+        
+        verify(userRepository).findByEmail("johndoe@example.com");
+        verifyNoMoreInteractions(userRepository);
+    }
+
+    @Test
+    void shouldReturnUserWhenEmailExists() {
+        when(userRepository.findByEmail("johndoe@example.com")).thenReturn(Optional.of(user));
+
+        Optional<User> foundUser = userService.getUserByEmail("johndoe@example.com");
+
+        assertTrue(foundUser.isPresent());
+        assertEquals("johndoe@example.com", foundUser.get().getEmail());
     }
 
 }
