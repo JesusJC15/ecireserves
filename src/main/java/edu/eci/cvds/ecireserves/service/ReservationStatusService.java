@@ -3,7 +3,6 @@ package edu.eci.cvds.ecireserves.service;
 import java.time.LocalTime;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +16,13 @@ import edu.eci.cvds.ecireserves.repository.ReservationRepository;
 @Service
 public class ReservationStatusService {
 
-    @Autowired
-    private ReservationRepository reservationRepository;
-    @Autowired
-    private LaboratoryRepository laboratoryRepository;
+    private final ReservationRepository reservationRepository;
+    private final LaboratoryRepository laboratoryRepository;
+
+    public ReservationStatusService(ReservationRepository reservationRepository, LaboratoryRepository laboratoryRepository) {
+        this.reservationRepository = reservationRepository;
+        this.laboratoryRepository = laboratoryRepository;
+    }
 
     /**
      * This method is used to change the status of the reservations that have already expired

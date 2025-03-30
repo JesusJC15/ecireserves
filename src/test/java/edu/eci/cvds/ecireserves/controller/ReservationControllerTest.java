@@ -42,6 +42,21 @@ class ReservationControllerTest {
 
     @SuppressWarnings("null")
     @Test
+    void getReservationById_ShouldReturnReservation() throws EciReservesException {
+        Reservation reservation = new Reservation("1", "user1", "lab1", LocalDate.now(), LocalTime.of(10, 0), 30, LocalTime.now().plusMinutes(30), "Study", ReservationStatus.AGENDADA);
+        when(reservationService.getReservationById("1")).thenReturn(reservation);
+
+        ResponseEntity<ApiResponse<Reservation>> response = reservationController.getReservationById("1");
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertTrue(response.getBody().isSuccess());
+        assertEquals("1", response.getBody().getData().getId());
+        verify(reservationService, times(1)).getReservationById("1");
+    }
+    
+    @SuppressWarnings("null")
+    @Test
     void getAllReservations_ShouldReturnListOfReservations() {
         List<Reservation> reservations = Arrays.asList(new Reservation("1", "u1", "l1", LocalDate.now(), LocalTime.now(), 30, LocalTime.now().plusMinutes(30), "description", ReservationStatus.AGENDADA));
         when(reservationService.getAllReservations()).thenReturn(reservations);

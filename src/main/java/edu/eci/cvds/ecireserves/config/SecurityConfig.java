@@ -2,6 +2,7 @@ package edu.eci.cvds.ecireserves.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -11,6 +12,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import edu.eci.cvds.ecireserves.service.CustomUserDetailsService;
@@ -45,9 +48,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                     .requestMatchers("/api/register", "/api/login", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                     .requestMatchers("/api/admin/**").hasRole("ADMINISTRADOR")
-                    .requestMatchers("/api/user/**").hasAnyRole("USUARIO", "ADMINISTRADOR", "PROFESOR")
+                    .requestMatchers("/api/user/**").hasAnyRole("ESTUDIANTE", "ADMINISTRADOR", "PROFESOR")
                     .anyRequest().authenticated()
                 )
+                .exceptionHandling(ex -> ex
+                    .accessDeniedHandler(accessDeniedHandler())
+                    .authenticationEntryPoint(new Http403ForbiddenEntryPoint())
+                )   
                 .sessionManagement(sessionManagement -> 
                     sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );
@@ -58,5 +65,14 @@ public class SecurityConfig {
     @Bean
     public JwtRequestFilter jwtRequestFilter() {
         return new JwtRequestFilter(jwtUtil, customUserDetailsService);
+    }
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler(){
+        return (request, response, accessDeniedException) -> {
+            response.setStatus(HttpStatus.FORBIDDEN.value());
+            response.setContentType("application/json");
+            response.getWriter().write("{\"success\": false, \"message\": \"Acceso denegado: No tienes permisos para esta operación.\", \"data\": null}");
+        };
     }
 }

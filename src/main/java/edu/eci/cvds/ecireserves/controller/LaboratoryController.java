@@ -30,14 +30,14 @@ public class LaboratoryController {
     }
 
     @GetMapping("/user/laboratories")
-    @PreAuthorize("hasAnyRole('USUARIO', 'ADMINISTRADOR', 'PROFESOR')")
+    @PreAuthorize("hasAnyRole('ESTUDIANTE', 'ADMINISTRADOR', 'PROFESOR')")
     @Operation(summary = "Obtener todos los laboratorios", description = "Devuelve una lista de todos los laboratorios registrados.")
     public ResponseEntity<ApiResponse<List<Laboratory>>> getAllLaboratories() {
         return ResponseEntity.ok(new ApiResponse<>(true, "Laboratorios obtenidos exitosamente", laboratoryService.getAllLaboratories()));
     }
 
     @GetMapping("/user/laboratories/{id}")
-    @PreAuthorize("hasAnyRole('USUARIO', 'ADMINISTRADOR', 'PROFESOR')")
+    @PreAuthorize("hasAnyRole('ESTUDIANTE', 'ADMINISTRADOR', 'PROFESOR')")
     @Operation(summary = "Obtener un laboratorio por ID", description = "Busca un laboratorio en el sistema según su identificador único.")
     public ResponseEntity<ApiResponse<Laboratory>> getLaboratoryById(
             @Parameter(description = "ID del laboratorio a buscar", required = true) @PathVariable("id") String id)
@@ -46,7 +46,7 @@ public class LaboratoryController {
     }
 
     @GetMapping("/user/laboratories/classroom/{classroom}")
-    @PreAuthorize("hasAnyRole('USUARIO', 'ADMINISTRADOR', 'PROFESOR')")
+    @PreAuthorize("hasAnyRole('ESTUDIANTE', 'ADMINISTRADOR', 'PROFESOR')")
     @Operation(summary = "Buscar laboratorios por salón", description = "Devuelve una lista de laboratorios asociados a un salón específico.")
     public ResponseEntity<ApiResponse<List<Laboratory>>> getLaboratoriesByClassroom(
             @Parameter(description = "Salón del laboratorio", required = true) @PathVariable("classroom") String classroom) {
@@ -54,7 +54,7 @@ public class LaboratoryController {
     }
 
     @GetMapping("/user/laboratories/search")
-    @PreAuthorize("hasAnyRole('USUARIO', 'ADMINISTRADOR', 'PROFESOR')")
+    @PreAuthorize("hasAnyRole('ESTUDIANTE', 'ADMINISTRADOR', 'PROFESOR')")
     @Operation(summary = "Buscar laboratorios por nombre", description = "Devuelve una lista de laboratorios cuyo nombre coincide con el parámetro proporcionado.")
     public ResponseEntity<ApiResponse<List<Laboratory>>> getLaboratoriesByName(
             @Parameter(description = "Nombre del laboratorio", required = true) @RequestParam String name) {
@@ -62,7 +62,7 @@ public class LaboratoryController {
     }
 
     @GetMapping("/user/laboratories/capacity/{capacity}")
-    @PreAuthorize("hasAnyRole('USUARIO', 'ADMINISTRADOR', 'PROFESOR')")
+    @PreAuthorize("hasAnyRole('ESTUDIANTE', 'ADMINISTRADOR', 'PROFESOR')")
     @Operation(summary = "Buscar laboratorios por capacidad", description = "Devuelve una lista de laboratorios con la capacidad especificada.")
     public ResponseEntity<ApiResponse<List<Laboratory>>> getLaboratoriesByCapacity(
             @Parameter(description = "Capacidad del laboratorio", required = true) @PathVariable("capacity") int capacity) {
@@ -70,7 +70,7 @@ public class LaboratoryController {
     }
 
     @GetMapping("/user/laboratories/date/{date}")
-    @PreAuthorize("hasAnyRole('USUARIO', 'ADMINISTRADOR', 'PROFESOR')")
+    @PreAuthorize("hasAnyRole('ESTUDIANTE', 'ADMINISTRADOR', 'PROFESOR')")
     @Operation(summary = "Buscar laboratorios por fecha", description = "Devuelve una lista de laboratorios disponibles en una fecha específica.")
     public ResponseEntity<ApiResponse<List<Laboratory>>> getLaboratoriesByDate(
             @Parameter(description = "Fecha en formato YYYY-MM-DD", required = true) @PathVariable("date") LocalDate date) {
@@ -78,7 +78,7 @@ public class LaboratoryController {
     }
 
     @GetMapping("/user/laboratories/opening-time/{openingTime}")
-    @PreAuthorize("hasAnyRole('USUARIO', 'ADMINISTRADOR', 'PROFESOR')")
+    @PreAuthorize("hasAnyRole('ESTUDIANTE', 'ADMINISTRADOR', 'PROFESOR')")
     @Operation(summary = "Buscar laboratorios por hora de apertura", description = "Devuelve una lista de laboratorios que abren a la hora especificada.")
     public ResponseEntity<ApiResponse<List<Laboratory>>> getLaboratoriesByOpeningTime(
             @Parameter(description = "Hora de apertura en formato HH:mm", required = true) @PathVariable("openingTime") LocalTime openingTime) {
@@ -86,7 +86,7 @@ public class LaboratoryController {
     }
 
     @GetMapping("/user/laboratories/status/{status}")
-    @PreAuthorize("hasAnyRole('USUARIO', 'ADMINISTRADOR', 'PROFESOR')")
+    @PreAuthorize("hasAnyRole('ESTUDIANTE', 'ADMINISTRADOR', 'PROFESOR')")
     @Operation(summary = "Buscar laboratorios por estado", description = "Devuelve una lista de laboratorios filtrados por su estado actual.")
     public ResponseEntity<ApiResponse<List<Laboratory>>> getLaboratoriesByStatus(
             @Parameter(description = "Estado del laboratorio", required = true) @PathVariable("status") LaboratoryStatus status) {
