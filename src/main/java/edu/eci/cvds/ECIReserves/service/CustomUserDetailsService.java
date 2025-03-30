@@ -1,6 +1,7 @@
 package edu.eci.cvds.ecireserves.service;
 
 import java.util.Collections;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -29,5 +30,4 @@ public class CustomUserDetailsService implements UserDetailsService{
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), Collections.singletonList(authority));
     }
     
-
 }

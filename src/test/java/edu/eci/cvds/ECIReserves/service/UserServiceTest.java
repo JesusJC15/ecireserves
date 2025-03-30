@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,7 +39,6 @@ class UserServiceTest {
     @BeforeEach
     void setUp() {
         user = new User("1", "John Doe", "johndoe@example.com", "password123", UserRole.ESTUDIANTE);
-        new UserDTO("1", "John Doe", "johndoe@example.com", "password123", UserRole.ESTUDIANTE);
     }
 
     @Test
@@ -169,4 +169,15 @@ class UserServiceTest {
         verify(userRepository).findByEmail("johndoe@example.com");
         verifyNoMoreInteractions(userRepository);
     }
+
+    @Test
+    void shouldReturnUserWhenEmailExists() {
+        when(userRepository.findByEmail("johndoe@example.com")).thenReturn(Optional.of(user));
+
+        Optional<User> foundUser = userService.getUserByEmail("johndoe@example.com");
+
+        assertTrue(foundUser.isPresent());
+        assertEquals("johndoe@example.com", foundUser.get().getEmail());
+    }
+
 }
