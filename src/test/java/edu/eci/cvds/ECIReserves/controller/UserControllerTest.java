@@ -43,6 +43,7 @@ class UserControllerTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    @SuppressWarnings("null")
     @Test
     void getAllUsers_ShouldReturnListOfUsers() {
         List<User> users = Arrays.asList(new User("1", "John Doe", "john@example.com", "password", UserRole.ESTUDIANTE));
@@ -57,6 +58,7 @@ class UserControllerTest {
         verify(userService, times(1)).getAllUsers();
     }
 
+    @SuppressWarnings("null")
     @Test
     void getUserById_ShouldReturnUser_WhenUserExists() throws EciReservesException {
         User user = new User("1", "John Doe", "john@example.com", "password", null);
@@ -71,6 +73,7 @@ class UserControllerTest {
         verify(userService, times(1)).getUserById("1");
     }
 
+    @SuppressWarnings("null")
     @Test
     void getUsersByName_ShouldReturnMatchingUsers() {
         List<User> users = Arrays.asList(new User("1", "John Doe", "john@example.com", "password", null));
@@ -85,6 +88,7 @@ class UserControllerTest {
         verify(userService, times(1)).getUsersByName("John");
     }
 
+    @SuppressWarnings("null")
     @Test
     void createUser_ShouldReturnCreatedUser() throws EciReservesException {
         UserDTO userDTO = new UserDTO("1","John Doe", "john@example.com", "password", UserRole.ESTUDIANTE);
@@ -100,6 +104,7 @@ class UserControllerTest {
         verify(userService, times(1)).createUser(userDTO);
     }
 
+    @SuppressWarnings("null")
     @Test
     void updateUser_ShouldReturnUpdatedUser_WhenUserExist() throws EciReservesException{
         UserDTO userDTO = new UserDTO("1","John Doe", "john@example", "password", UserRole.ESTUDIANTE);
@@ -128,6 +133,7 @@ class UserControllerTest {
         verify(userService, times(1)).updateUser("2", userDTO);
     }
 
+    @SuppressWarnings("null")
     @Test
     void deleteUser_ShouldReturnSuccessMessage_WhenUserExists() throws EciReservesException {
         doNothing().when(userService).deleteUser("1");
@@ -153,6 +159,7 @@ class UserControllerTest {
         verify(userService, times(1)).deleteUser("99");
     }
 
+    @SuppressWarnings("null")
     @Test
     void getUserByEmail_ShouldReturnUser_WhenUserExists() {
         User user = new User("1", "John Doe", "john@example.com", "password", UserRole.ESTUDIANTE);
@@ -171,6 +178,7 @@ class UserControllerTest {
         verify(userService, times(1)).getUserByEmail("john@example.com");
     }
 
+    @SuppressWarnings("null")
     @Test
     void getUserByEmail_ShouldReturnNotFound_WhenUserDoesNotExist() {
         when(userService.getUserByEmail("notfound@example.com")).thenReturn(Optional.empty());

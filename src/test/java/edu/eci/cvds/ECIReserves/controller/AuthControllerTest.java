@@ -67,6 +67,7 @@ class AuthControllerTest {
         user = new User("1", "John Doe", "johndoe@example.com", "encodedPassword", UserRole.ESTUDIANTE);
     }
 
+    @SuppressWarnings("null")
     @Test
     void registerUser_ShouldReturnSuccess_WhenUserNotExists() {
         when(userRepository.findByEmail(userDTO.getEmail())).thenReturn(Optional.empty());
@@ -82,6 +83,7 @@ class AuthControllerTest {
         verify(userRepository, times(1)).save(any(User.class));
     }
 
+    @SuppressWarnings("null")
     @Test
     void registerUser_ShouldReturnBadRequest_WhenEmailAlreadyRegistered() {
         when(userRepository.findByEmail(userDTO.getEmail())).thenReturn(Optional.of(user));
@@ -95,6 +97,7 @@ class AuthControllerTest {
         verify(userRepository, never()).save(any(User.class));
     }
 
+    @SuppressWarnings("null")
     @Test
     void loginUser_ShouldReturnToken_WhenCredentialsAreValid() {
         AuthRequest authRequest = new AuthRequest("johndoe@example.com", "password");
