@@ -49,7 +49,6 @@ class ReservationStatusServiceTest {
     void setUp() {
         expiredReservation = new Reservation("1", "user123", "Lab-101", LocalDate.now(), LocalTime.of(10, 0), 2, LocalTime.of(12, 0), "Study Session", ReservationStatus.AGENDADA);
 
-        // Inicializar el mapa con una lista mutable
         Map<LocalDate, List<TimeSlot>> timeSlotsByDate = new HashMap<>();
         timeSlotsByDate.put(LocalDate.now(), new ArrayList<>(List.of(new TimeSlot(LocalTime.of(10, 0), LocalTime.of(12, 0)))));
 

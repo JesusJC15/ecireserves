@@ -36,7 +36,7 @@ class JwtUtilTest {
     }
 
     @Test
-    void testTokenExpiration() throws InterruptedException {
+    void testTokenExpiration() {
         when(userDetails.getUsername()).thenReturn("testuser");
         String token = jwtUtil.generateToken(userDetails);
         assertFalse(jwtUtil.extractExpiration(token).before(new Date()));

@@ -50,7 +50,6 @@ class LaboratoryControllerTest {
         );
     }
 
-    @SuppressWarnings("null")
     @Test
     void updateLaboratory_ShouldReturnUpdatedLaboratory_WhenExists() throws EciReservesException {
         LaboratoryDTO laboratoryDTO = new LaboratoryDTO("L202", "B-202", "Lab Redes", 30, "Laboratorio de Redes", LocalTime.of(8, 0), LocalTime.of(18, 0), LaboratoryStatus.ACTIVO);
@@ -81,7 +80,6 @@ class LaboratoryControllerTest {
         verify(laboratoryService, times(1)).updateLaboratory("99", laboratoryDTO);
     }
 
-    @SuppressWarnings("null")
     @Test
     void deleteLaboratory_ShouldReturnSuccessMessage_WhenExists() throws EciReservesException {
         doNothing().when(laboratoryService).deleteLaboratory("1");
@@ -107,7 +105,6 @@ class LaboratoryControllerTest {
         verify(laboratoryService, times(1)).deleteLaboratory("99");
     }
 
-    @SuppressWarnings("null")
     @Test
     void getLaboratoryById_ShouldReturnLaboratory_WhenExists() throws EciReservesException {
         Laboratory lab = new Laboratory("L202", "B-202", "Lab Redes", 30, "Laboratorio de Redes", LocalTime.of(8, 0), LocalTime.of(18, 0), LaboratoryStatus.ACTIVO, new ArrayList<>(), Collections.emptyMap());
@@ -135,7 +132,6 @@ class LaboratoryControllerTest {
         verify(laboratoryService, times(1)).getLaboratoryById("99");
     }
 
-    @SuppressWarnings("null")
     @Test
     void getLaboratoryByCapacity_ShouldReturnLaboratories_WhenExists() {
         List<Laboratory> labs = List.of(
@@ -154,7 +150,6 @@ class LaboratoryControllerTest {
         verify(laboratoryService, times(1)).getLaboratoriesByCapacity(30);
     }
 
-    @SuppressWarnings("null")
     @Test
     void getAllLaboratories_ShouldReturnListOfLaboratories() {
         when(laboratoryService.getAllLaboratories()).thenReturn(sampleLabs);
@@ -168,7 +163,6 @@ class LaboratoryControllerTest {
         verify(laboratoryService, times(1)).getAllLaboratories();
     }
 
-    @SuppressWarnings("null")
     @Test
     void getLaboratoryByClassroom_ShouldReturnLaboratory_WhenExists() {
         when(laboratoryService.getLaboratoriesByClassroom("A101")).thenReturn(List.of(sampleLabs.get(0)));
@@ -182,7 +176,6 @@ class LaboratoryControllerTest {
         verify(laboratoryService, times(1)).getLaboratoriesByClassroom("A101");
     }
 
-    @SuppressWarnings("null")
     @Test
     void getLaboratoryByClassroom_ShouldReturnEmptyList_WhenNotFound() {
         when(laboratoryService.getLaboratoriesByClassroom("Z999")).thenReturn(Collections.emptyList());
@@ -196,7 +189,6 @@ class LaboratoryControllerTest {
         verify(laboratoryService, times(1)).getLaboratoriesByClassroom("Z999");
     }
 
-    @SuppressWarnings("null")
     @Test
     void getLaboratoriesByName_ShouldReturnMatchingLaboratories() {
         when(laboratoryService.getLaboratoriesByName("Lab Redes")).thenReturn(List.of(sampleLabs.get(0)));
@@ -210,7 +202,6 @@ class LaboratoryControllerTest {
         verify(laboratoryService, times(1)).getLaboratoriesByName("Lab Redes");
     }
     
-    @SuppressWarnings("null")
     @Test
     void getLaboratoryByOpeningTime_ShouldReturnLaboratories_WhenExists() {
         LocalTime openingTime = LocalTime.of(7, 0);
@@ -227,7 +218,6 @@ class LaboratoryControllerTest {
         verify(laboratoryService, times(1)).getLaboratoriesByOpeningTime(openingTime);
     }
 
-    @SuppressWarnings("null")
     @Test
     void createLaboratory_ShouldReturnCreatedLaboratory() throws EciReservesException {
         LaboratoryDTO laboratoryDTO = new LaboratoryDTO("L202", "B-202", "Lab Redes", 30, "Laboratorio de Redes", LocalTime.of(8, 0), LocalTime.of(18, 0), LaboratoryStatus.ACTIVO);
