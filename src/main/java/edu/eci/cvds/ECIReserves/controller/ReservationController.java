@@ -37,6 +37,12 @@ public class ReservationController {
         return ResponseEntity.ok(new ApiResponse<>(true, "Reservas obtenidas exitosamente", reservationService.getAllReservations()));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<Reservation>> getReservationById(@PathVariable("id") String id) throws EciReservesException {
+        return ResponseEntity.ok(new ApiResponse<>(true, "Reserva obtenida exitosamente", reservationService.getReservationById(id)));
+    }
+
+
     @GetMapping("/user/{userId}")
     public ResponseEntity<ApiResponse<List<Reservation>>> getReservationsByUserId(@PathVariable("userId") String userId) {
         return ResponseEntity.ok(new ApiResponse<>(true, "Reservas del usuario con id: " + userId, reservationService.getReservationsByUserId(userId)));

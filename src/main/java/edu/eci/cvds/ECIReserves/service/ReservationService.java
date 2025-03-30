@@ -137,21 +137,44 @@ public class ReservationService {
      * @throws EciReservesException
      */
     public Reservation updateReservation(String id, ReservationDTO reservationDTO) throws EciReservesException {
-        Reservation reservation = reservationRepository.findById(id).orElseThrow(() -> new EciReservesException(EciReservesException.RESERVATION_NOT_FOUND));
-        Laboratory laboratory = laboratoryRepository.findById(reservationDTO.getLaboratoryId()).orElseThrow(() -> new EciReservesException(EciReservesException.LABORATORY_NOT_FOUND));
-        reservation.setStatus(ReservationStatus.PENDIENTE);
-        if(reservationDTO.getNewStartLocalTime() != null && reservationDTO.getNewDuration() != null){
-            laboratory.removeTimeSlot(reservation.getStartTime(), reservation.getStartTime().plusMinutes(reservation.getDuration()), reservationDTO.getNewStartLocalTime(), reservationDTO.getNewStartLocalTime().plusMinutes(reservationDTO.getNewDuration()));
+        Reservation reservation = reservationRepository.findById(id)
+                .orElseThrow(() -> new EciReservesException(EciReservesException.RESERVATION_NOT_FOUND));
+
+        Laboratory laboratory = laboratoryRepository.findById(reservationDTO.getLaboratoryId())
+                .orElseThrow(() -> new EciReservesException(EciReservesException.LABORATORY_NOT_FOUND));
+
+
+        if (reservationDTO.getStatus() != null) {
+            reservation.setStatus(reservationDTO.getStatus());
+        }
+
+        if (reservationDTO.getNewStartLocalTime() != null && reservationDTO.getNewDuration() != null) {
+            laboratory.removeTimeSlot(
+                    reservation.getStartTime(),
+                    reservation.getStartTime().plusMinutes(reservation.getDuration()),
+                    reservationDTO.getNewStartLocalTime(),
+                    reservationDTO.getNewStartLocalTime().plusMinutes(reservationDTO.getNewDuration())
+            );
             reservation.setStartTime(reservationDTO.getNewStartLocalTime());
             reservation.setDuration(reservationDTO.getNewDuration());
             laboratoryRepository.save(laboratory);
         }
-        if(reservationDTO.getLaboratoryId() != null) reservation.setLaboratoryId(reservationDTO.getLaboratoryId());
-        if(reservationDTO.getDate() != null) reservation.setDate(reservationDTO.getDate());
-        if(reservationDTO.getPurpose() != null) reservation.setPurpose(reservationDTO.getPurpose());
-        reservation.setStatus(ReservationStatus.AGENDADA);
+
+        if (reservationDTO.getLaboratoryId() != null) {
+            reservation.setLaboratoryId(reservationDTO.getLaboratoryId());
+        }
+
+        if (reservationDTO.getDate() != null) {
+            reservation.setDate(reservationDTO.getDate());
+        }
+
+        if (reservationDTO.getPurpose() != null) {
+            reservation.setPurpose(reservationDTO.getPurpose());
+        }
+
         return reservationRepository.save(reservation);
     }
+
 
     /**
      * Delete reservation

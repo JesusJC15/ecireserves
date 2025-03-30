@@ -3,6 +3,7 @@ package edu.eci.cvds.ECIReserves.dto;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import edu.eci.cvds.ECIReserves.enums.ReservationStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,7 @@ public class ReservationDTO {
     private LocalTime newStartLocalTime;
     private Integer newDuration;
     private String purpose;
+    private ReservationStatus status;
 
     public ReservationDTO(String id, String userId, String laboratoryId, LocalDate date, LocalTime startTime, Integer duration, String purpose) {
         this.id = id;
@@ -32,5 +34,6 @@ public class ReservationDTO {
         this.startTime = startTime;
         this.duration = duration;
         this.purpose = purpose;
+        this.status = null;
     }
 }
