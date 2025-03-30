@@ -26,7 +26,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@RequestMapping("/api/admin")
+@RequestMapping("/api")
 @Tag(name = "Usuarios", description = "Operaciones sobre los usuarios del sistema")
 public class UserController {
 
@@ -36,15 +36,16 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/users")
+    @GetMapping("/admin/users")
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @Operation(summary = "Obtener todos los usuarios", description = "Devuelve una lista de todos los usuarios del sistema")
     public ResponseEntity<ApiResponse<List<User>>> getAllUsers() {
         return ResponseEntity.ok(new ApiResponse<>(true, "Usuarios obtenidos exitosamente", userService.getAllUsers()));
     }
 
-    @GetMapping("/users/{id}")
-    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    
+    @GetMapping("/user/users/{id}")
+    @PreAuthorize("hasAnyRole('ESTUDIANTE', 'ADMINISTRADOR', 'PROFESOR')")
     @Operation(summary = "Obtener usuario por ID", description = "Busca un usuario en el sistema según su identificador único.")
     public ResponseEntity<ApiResponse<User>> getUserById(
             @Parameter(description = "ID del usuario a buscar", required = true) @PathVariable("id") String id)
@@ -52,16 +53,16 @@ public class UserController {
         return ResponseEntity.ok(new ApiResponse<>(true, "Usuario con id: " + id, userService.getUserById(id)));
     }
 
-    @GetMapping("/users/search")
-    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    @GetMapping("/user/users/search")
+    @PreAuthorize("hasAnyRole('ESTUDIANTE', 'ADMINISTRADOR', 'PROFESOR')")
     @Operation(summary = "Buscar usuarios por nombre", description = "Busca usuarios en el sistema según su nombre.")
     public ResponseEntity<ApiResponse<List<User>>> getUsersByName(
             @Parameter(description = "Nombre del usuario a buscar", required = true) @RequestParam String name) {
         return ResponseEntity.ok(new ApiResponse<>(true, "Usuarios con nombre: " + name , userService.getUsersByName(name)));
     }
 
-    @GetMapping("/users/email")
-    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    @GetMapping("/user/users/email")
+    @PreAuthorize("hasAnyRole('ESTUDIANTE', 'ADMINISTRADOR', 'PROFESOR')")
     @Operation(summary = "Buscar usuario por correo electrónico", description = "Busca un usuario en el sistema según su correo electrónico.")
     public ResponseEntity<ApiResponse<Optional<User>>> getUserByEmail(
         @Parameter(description = "Correo electrónico del usuario a buscar", required = true) @RequestParam String email) {
@@ -72,8 +73,8 @@ public class UserController {
         }
         return ResponseEntity.ok(new ApiResponse<>(true, "Usuario encontrado", user));
     }
-    
-    @PostMapping("/users")
+
+    @PostMapping("/admin/users")
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @Operation(summary = "Crear nuevo usuario", description = "Crea un nuevo usuario en el sistema.")
     public ResponseEntity<ApiResponse<User>> createUser(
@@ -82,7 +83,7 @@ public class UserController {
         return ResponseEntity.ok(new ApiResponse<>(true, "Usuario creado", userService.createUser(userDTO)));
     }
 
-    @PutMapping("/users/{id}")
+    @PutMapping("/admin/users/{id}")
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @Operation(summary = "Actualizar usuario", description = "Actualiza un usuario existente en el sistema.")
     public ResponseEntity<ApiResponse<User>> updateUser(
@@ -92,7 +93,7 @@ public class UserController {
         return ResponseEntity.ok(new ApiResponse<>(true, "Usuario actualizado", userService.updateUser(id, userDTO)));
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/admin/users/{id}")
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @Operation(summary = "Eliminar usuario", description = "Elimina un usuario del sistema.")
     public ResponseEntity<ApiResponse<Void>> deleteUser(
