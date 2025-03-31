@@ -111,7 +111,6 @@ public class LaboratoryService {
             throw new EciReservesException(EciReservesException.LABORATORY_ALREADY_EXISTS);
         }else{
             Laboratory laboratory = new Laboratory();
-            laboratory.setId(laboratoryDTO.getId());
             laboratory.setClassroom(laboratoryDTO.getClassroom());
             laboratory.setName(laboratoryDTO.getName());
             laboratory.setCapacity(laboratoryDTO.getCapacity());
