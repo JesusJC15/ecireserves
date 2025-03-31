@@ -77,6 +77,23 @@ Documentacion con Swagger de los endpoints principales:
 
 https://ecireserves-bfccasdkhxcwgnev.canadacentral-01.azurewebsites.net/swagger-ui/index.html
 
+| Endpoint | Código de Estado | Descripcion del Error | Ejemplo |
+|--------------------------|------------------|----------------------|---------|
+| GET /user/users/{id} | 400 Bad Request | El usuario no existe | Buscar un usuario por un id que no existe |
+| GET /user/users/{email} | 404 Not found | Usuario no encontrado | Buscar un usuario con un correo que no existe |
+| PUT /admin/users/{id} | 400 Bad Request | El usuario no existe | Actualizar un usuario que no existe |
+| DELETE /admin/users/{id} | 400 Bad Request | El usuario no existe | Eliminar un usuario que no existe |
+| POST /admin/users | 400 Bad Request | Los campos no pueden estar vacios | Crear un usuario con campos vacios |
+| GET /admin/users | 403 Forbidden | Acceso denegado, no tienes acceso para esta operacion | Intentar acceder sin rol ADMINISTRADOR |
+| GET /user/reservations/status/{status} | 400 Bad Request | La reserva no existe | Buscar un estado incorrecto |
+| POST /user/reservations | 400 Bad Request | La franja horaria no es valida | Intentar crea una reserva con hora, fecha y duración incorrecta |
+| PUT /admin/reservations/{id} | 400 Bad Request | La reserva no existe | Intentar actualizar una reserva que no existe |
+| DELETE /user/reservations/{id} | 400 Bad Request | La reserva no existe | Intentar eliminar una reserva que no existe |
+| GET /user/laboratories/{id} | 400 Bad Request | El laboratorio no existe | Buscar un laboratorio que no existe |
+| GET /user/laboratories/capacity/{capacity} | 500 Internal Server Error | La capacidad debe ser un número | Buscar un laboratorio con capacidad en letras|
+| PUT /admin/laboratories/{id}| 400 Bad Request | El laboratorio no existe| Actualizar un laboraorio que no existe |
+| DELETE /admin/laboratories/{id} | 400 Bad Request | El laboratorio no existe | Eliminar un laboratorio que no existe |
+
 ## Pruebas y cubrimiento
 Ejecutar los tests con:
 - mvn test
@@ -93,4 +110,3 @@ Cobertura en SonarCloud
 
 2. Subir el JAR a Azure App Service (usando GitHub Actions o manualmente).
 
-# Intengrantes: 
