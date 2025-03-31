@@ -1,10 +1,13 @@
 # Proyecto ECIReserves (Backend) - NetRunners
 
 ## Descripción del proyecto 
-Este proyecto es el backend del sistema de reservas de laboratorios ECIReserves. Está desarrollado con Java 17, Spring Boot, Maven y utiliza MongoDB como base de datos.
+Este proyecto es el backend de la aplicación para la gestión de reservas de laboratorios en la Decanatura de Ingeniería de Sistemas de la Escuela Colombiana de Ingeniería Julio Garavito. Permite a los usuarios registrarse, autenticar su sesión y realizar reservas según la disponibilidad de los laboratorios. Está desarrollado con Java 17, Spring Boot, Maven y utiliza MongoDB como base de datos.
 
 ## Características
-- Gestión de usuarios, laboratorios y reservas.
+- Gestión de Usuarios: Registro, autenticación y roles (Administrador, Estudiante, Profesor).
+- Gestión de Laboratorios: Consultar disponibilidad y asignaciones.
+- Gestión de Reservas: Creación, modificación y cancelación de reservas.
+- Autenticación Segura: Cifrado de contraseñas con BCrypt y manejo de sesiones con Spring Security.
 - Validaciones para evitar conflictos de horarios.
 - API REST para interacción con el frontend.
 - Integración con MongoDB.
@@ -25,6 +28,7 @@ Antes de ejecutar el proyecto, asegúrate de tener instalado:
 - Java 17.
 - Maven.
 - MongoDB.
+- Azure App Service.
 
 ## Arquitectura del proyecto
 El backend sigue una arquitectura basada en capas y el patrón MVC (Model-View-Controller).
@@ -72,6 +76,12 @@ El sistema maneja tres entidades principales: Usuario, Reserva y Laboratorio.
 4. Inicia el backend:
 - mvn spring-boot:run
 
+El backend estará disponible en http://localhost:8080/
+
+5. Integrar con frontend:
+
+https://github.com/JesusJC15/ECIReserves_React
+
 ## Uso de la API
 Documentacion con Swagger de los endpoints principales:
 
@@ -94,10 +104,14 @@ https://ecireserves-bfccasdkhxcwgnev.canadacentral-01.azurewebsites.net/swagger-
 | PUT /admin/laboratories/{id}| 400 Bad Request | El laboratorio no existe| Actualizar un laboraorio que no existe |
 | DELETE /admin/laboratories/{id} | 400 Bad Request | El laboratorio no existe | Eliminar un laboratorio que no existe |
 
-## Pruebas y cubrimiento
-Ejecutar los tests con:
+## Build y Pruebas
+Compilar:
+- mvn clean package
+  
+Ejecutar los tests:
 - mvn test
 
+## Cubrimiento
 Cobertura en Jacoco
 ![](/assets/CoberturaJacoco.png)
 
