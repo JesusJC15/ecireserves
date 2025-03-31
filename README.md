@@ -92,3 +92,5 @@ Cobertura en SonarCloud
 - mvn clean package
 
 2. Subir el JAR a Azure App Service (usando GitHub Actions o manualmente).
+
+# Intengrantes: 
