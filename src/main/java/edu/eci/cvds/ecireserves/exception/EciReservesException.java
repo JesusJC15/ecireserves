@@ -18,6 +18,7 @@ public class EciReservesException extends Exception {
     public static final String TIMESLOT_OVERLAPS = "La franja horaria se superpone con otra";
     public static final String TIMESLOT_NOT_FOUND = "La franja horaria no existe";
     public static final String INVALID_CREDENTIALS = "Las credenciales no son validas";
+    public static final String USER_DATA_NOT_COMPLETE = "Los datos del usuario no están completos";
 
     public EciReservesException(String message) {
         super(message);

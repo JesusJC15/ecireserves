@@ -49,6 +49,9 @@ public class AuthController {
         if (user != null) {
             return ResponseEntity.badRequest().body(new ApiResponse<>(false, "El email ya está registrado", null));
         } else {
+            if(userDTO.getName() == null || userDTO.getEmail() == null || userDTO.getPassword() == null || userDTO.getRol() == null) {
+                return ResponseEntity.badRequest().body(new ApiResponse<>(false, "Los campos no pueden estar vacíos", null));
+            }
             user = new User(userDTO.getId(), userDTO.getName(), userDTO.getEmail(), 
                             passwordEncoder.encode(userDTO.getPassword()), userDTO.getRol());
             userRepository.save(user);
