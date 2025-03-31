@@ -45,7 +45,7 @@ public class ReservationController {
         return ResponseEntity.ok(new ApiResponse<>(true, "Reserva con id " + id + " encontrada", reservationService.getReservationById(id)));
     }
 
-    @GetMapping("/user/reservations/{userId}")
+    @GetMapping("/user/reservations/user/{userId}")
     @PreAuthorize("hasAnyRole('ESTUDIANTE', 'ADMINISTRADOR', 'PROFESOR')")
     @Operation(summary = "Obtener reservas por usuario", description = "Devuelve todas las reservas realizadas por un usuario específico.")
     public ResponseEntity<ApiResponse<List<Reservation>>> getReservationsByUserId(
