@@ -3,7 +3,6 @@ package edu.eci.cvds.ecireserves.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import edu.eci.cvds.ecireserves.dto.UserDTO;
@@ -16,10 +15,8 @@ import edu.eci.cvds.ecireserves.repository.UserRepository;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -76,8 +73,7 @@ public class UserService {
             User user = new User();
             user.setName(userDTO.getName());
             user.setEmail(userDTO.getEmail());
-        
-            user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+            user.setPassword(userDTO.getPassword());
             user.setRol(userDTO.getRol());
     
             return userRepository.save(user);
